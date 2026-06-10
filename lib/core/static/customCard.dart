@@ -1,59 +1,126 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class customCard extends StatelessWidget {
-  final String imageUrl;
+class CustomCard extends StatelessWidget {
 
-  const customCard({
+  final String imageUrl;
+  final String title;
+
+  const CustomCard({
     super.key,
     required this.imageUrl,
+    required this.title,
   });
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       width: 280,
-      height: 190,
-      margin: const EdgeInsets.only(right: 15),
+      margin: const EdgeInsets.only(
+        right: 15,
+      ),
 
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+        borderRadius:
+        BorderRadius.circular(20),
+
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(.15),
+            color:
+            Colors.black.withOpacity(
+              0.1,
+            ),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
         ],
       ),
 
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+      child: Column(
 
-        child: Image.network(
-          imageUrl,
-          fit: BoxFit.cover,
+        crossAxisAlignment:
+        CrossAxisAlignment.start,
 
-          loadingBuilder:
-              (context, child, progress) {
-            if (progress == null) return child;
+        children: [
 
-            return const Center(
-              child:
-              CircularProgressIndicator(),
-            );
-          },
+          Expanded(
+            child: ClipRRect(
 
-          errorBuilder:
-              (context, error, stackTrace) {
-            return const Center(
-              child: Icon(
-                Icons.broken_image,
-                size: 50,
+              borderRadius:
+              const BorderRadius.only(
+                topLeft:
+                Radius.circular(20),
+                topRight:
+                Radius.circular(20),
               ),
-            );
-          },
-        ),
+
+              child: Image.network(
+
+                imageUrl,
+
+                width: double.infinity,
+
+                fit: BoxFit.cover,
+
+                loadingBuilder:
+                    (
+                    context,
+                    child,
+                    progress,
+                    ) {
+
+                  if (progress == null) {
+                    return child;
+                  }
+
+                  return const Center(
+                    child:
+                    CircularProgressIndicator(),
+                  );
+                },
+
+                errorBuilder:
+                    (
+                    context,
+                    error,
+                    stackTrace,
+                    ) {
+
+                  return const Center(
+                    child: Icon(
+                      Icons.broken_image,
+                      size: 50,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+
+          Padding(
+            padding:
+            const EdgeInsets.all(12),
+
+            child: Text(
+
+              title,
+
+              maxLines: 2,
+
+              overflow:
+              TextOverflow.ellipsis,
+
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight:
+                FontWeight.bold,
+                color:
+                Color(0xff8B5E2B),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

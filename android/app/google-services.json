@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "694979157648",
+    "project_id": "civilization-faf85",
+    "storage_bucket": "civilization-faf85.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:694979157648:android:e5d73778e47919f3314215",
+        "android_client_info": {
+          "package_name": "com.example.civilization"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "694979157648-20vot2njoe5rc1r57d7i1pc3u5b16nq0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.civilization",
+            "certificate_hash": "8c5335a1f86fc0047eb6a34c5310f20f13edaf36"
+          }
+        },
+        {
+          "client_id": "694979157648-g4pvv8ed38tr2ruchug0sc2lpdbh33ct.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-XGZ1aDwarfJiCOjETWkJG0QhsdbTES4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "694979157648-g4pvv8ed38tr2ruchug0sc2lpdbh33ct.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

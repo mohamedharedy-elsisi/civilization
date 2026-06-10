@@ -1,0 +1,380 @@
+import 'package:civilization/AuthScr/login_scr.dart';
+import 'package:civilization/core/theme/AppColors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../core/constant.dart';
+
+class profile extends StatefulWidget {
+  const profile({super.key});
+
+  @override
+  State<profile> createState() =>
+      _profileState();
+}
+
+class _profileState extends State<profile> {
+
+  User? user;
+  File? profileImage;
+
+  @override
+  void initState() {
+    super.initState();
+
+    user = FirebaseAuth.instance.currentUser;
+
+    loadProfileImage();
+
+    user?.reload().then((_) {
+      setState(() {
+        user = FirebaseAuth.instance.currentUser;
+      });
+    });
+  }
+  Future<void> loadProfileImage() async {
+
+    final prefs =
+    await SharedPreferences.getInstance();
+
+    final imagePath =
+    prefs.getString("profile_image");
+
+    if (imagePath != null) {
+
+      setState(() {
+        profileImage = File(imagePath);
+      });
+    }
+  }
+  Future<void> pickImage() async {
+
+    final picker = ImagePicker();
+
+    final XFile? image =
+    await picker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (image == null) return;
+
+    final prefs =
+    await SharedPreferences.getInstance();
+
+    await prefs.setString(
+      "profile_image",
+      image.path,
+    );
+
+    setState(() {
+      profileImage = File(image.path);
+    });
+  }
+  // Future<void> uploadImage(File file) async {
+  //
+  //   try {
+  //
+  //     final user =
+  //         FirebaseAuth.instance.currentUser;
+  //
+  //     if (user == null) return;
+  //
+  //     final storageRef =
+  //     FirebaseStorage.instance
+  //         .ref()
+  //         .child("users")
+  //         .child("${user.uid}.jpg");
+  //
+  //     await storageRef.putFile(file);
+  //
+  //     final imageUrl =
+  //     await storageRef.getDownloadURL();
+  //
+  //     await user.updatePhotoURL(
+  //       imageUrl,
+  //     );
+  //
+  //     await user.reload();
+  //
+  //     setState(() {
+  //       this.user =
+  //           FirebaseAuth.instance.currentUser;
+  //     });
+  //
+  //   } catch (e) {
+  //
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(
+  //       SnackBar(
+  //         content: Text(
+  //           e.toString(),
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
+  Future<void> logout() async {
+
+    await GoogleSignIn().signOut();
+
+    await FirebaseAuth.instance.signOut();
+
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const LoginScr(),
+      ),
+          (route) => false,
+    );
+  }
+
+  Widget profileItem(String title) {
+    return Column(
+      crossAxisAlignment:
+      CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 18,
+            color: AppColors.darkGold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        const Divider(thickness: 1),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      backgroundColor: const Color(0xffF7F4EE),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Profile",
+          style: TextStyle(
+            color: AppColors.darkGold,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+
+        backgroundColor: const Color(0xffF7F4EE),
+        elevation: 0,
+
+        automaticallyImplyLeading: false,
+      ),
+
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
+          child: Column(
+            crossAxisAlignment:
+            CrossAxisAlignment.start,
+            children: [
+              // Row(
+              //   children: [
+              //     IconButton(
+              //       onPressed: () {
+              //         Navigator.pop(context);
+              //       },
+              //       icon: const Icon(
+              //         Icons.arrow_back,
+              //       ),
+              //     ),
+              //     const Text(
+              //       "Profile",
+              //       style: TextStyle(
+              //         fontSize: 22,
+              //         fontWeight: FontWeight.bold,
+              //         color: AppColors.darkGold,
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              //  const SizedBox(height: 40),
+        Row(
+          children: [
+            GestureDetector(
+              onTap: pickImage,
+
+              child: CircleAvatar(
+                radius: 40,
+
+                backgroundImage:
+
+                profileImage != null
+
+                    ? FileImage(profileImage!)
+
+                    : user?.photoURL != null
+
+                    ? NetworkImage(
+                  user!.photoURL!,
+                ) as ImageProvider
+
+                    : null,
+
+                child:
+
+                profileImage == null &&
+                    user?.photoURL == null
+
+                    ? Image.asset(
+                  "assets/icons/user.png",
+                  width: 40,
+                  height: 40,
+                )
+
+                    : null,
+              ),
+            ),
+
+            const SizedBox(width: 15),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment:
+                CrossAxisAlignment.start,
+
+                children: [
+
+                  Text(
+                    user?.displayName ?? "User",
+
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: AppColors.brown,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+
+                  const SizedBox(height: 4),
+
+                  Text(
+                    user?.email ?? "",
+
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+
+                    style: const TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+
+                showDialog(
+                  context: context,
+
+                  builder: (context) {
+
+                    return AlertDialog(
+                      backgroundColor:
+                      const Color(0xffF7F4EE),
+
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(20),
+                      ),
+
+                      title: const Text(
+                        "Logout",
+                        style: TextStyle(
+                          color: AppColors.darkGold,
+                        ),
+                      ),
+                      content: const Text(
+                        "Are you sure you want to logout?",
+                      ),
+
+                      actions: [
+
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+
+                          child: const Text(
+                            "Cancel",
+                          ),
+                        ),
+
+                        TextButton(
+                          onPressed: () async {
+
+                            Navigator.pop(context);
+
+                            await logout();
+
+                          },
+
+                          child: const Text(
+                            "Logout",
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              child: Column(
+                children: [
+
+                  Image.asset(
+                    AppConstant.logout,
+                    width: 28,
+                    height: 28,
+                  ),
+
+                  const SizedBox(height: 4),
+
+                  const Text(
+                    "Logout",
+                    style: TextStyle(
+                      color: AppColors.darkGold,
+                    ),
+                  ),
+                ],
+              ),
+            )
+
+
+          ],
+        ),
+
+              const SizedBox(height: 50),
+
+              profileItem("History"),
+
+              const SizedBox(height: 25),
+
+              profileItem("Settings"),
+
+              const SizedBox(height: 25),
+
+              profileItem("Privacy"),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

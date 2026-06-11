@@ -5,6 +5,7 @@ import '../../views/home.dart';
 import '../../views/profile.dart';
 import '../../views/saved.dart';
 import '../../views/scan.dart';
+import '../theme/AppColors.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -34,13 +35,10 @@ class _MainLayoutState
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: const Color(0xffF7F4EE),
+      backgroundColor: AppColors.background,
       body: screens[currentIndex],
       floatingActionButton: GestureDetector(
-        onTap: () {
-
-        },
-
+        onTap: () {},
         child: Container(
           width: 60,
           height: 60,
@@ -48,7 +46,7 @@ class _MainLayoutState
           decoration: BoxDecoration(
             shape: BoxShape.circle,
 
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               colors: [
                 Color(0xffF8E7A1),
                 Color(0xffD4AF37),
@@ -81,17 +79,11 @@ class _MainLayoutState
       bottomNavigationBar: Container(
 
         height: 75,
-
-        margin: const EdgeInsets.all(15),
-
+        margin: EdgeInsets.all(15),
         decoration: BoxDecoration(
-
           color: Colors.white,
-
           borderRadius: BorderRadius.circular(25),
-
           boxShadow: [
-
             BoxShadow(
               color: Colors.black.withOpacity(.1),
               blurRadius: 10,
@@ -100,12 +92,10 @@ class _MainLayoutState
         ),
 
         child: Row(
-
           mainAxisAlignment:
           MainAxisAlignment.spaceAround,
 
           children: [
-
             navItem(
               index: 0,
               image: "assets/icons/home.png",
@@ -149,37 +139,25 @@ class _MainLayoutState
     return GestureDetector(
 
       onTap: () {
-
         setState(() {
-
           currentIndex = index;
-
         });
       },
 
       child: AnimatedContainer(
-
-        duration: const Duration(
+        duration: Duration(
           milliseconds: 250,
         ),
 
-        padding: const EdgeInsets.all(10),
-
+        padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
 
-          color: isSelected
-              ? const Color(0xffD4AF37)
-              .withOpacity(.2)
-              : Colors.transparent,
+          color: isSelected ? Color(0xffD4AF37).withOpacity(.2) : Colors.transparent,
 
-          borderRadius:
-          BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(15),
         ),
 
-        child: Image.asset(
-
-          image,
-
+        child: Image.asset(image,
           width: isSelected ? 30 : 24,
           height: isSelected ? 30 : 24,
         ),

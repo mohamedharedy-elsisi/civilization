@@ -24,7 +24,7 @@ class CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
 
-        hintStyle: const TextStyle(
+        hintStyle: TextStyle(
           color: Colors.grey,
           fontSize: 15,
         ),
@@ -32,9 +32,9 @@ class CustomTextField extends StatelessWidget {
         prefixIcon: prefixIcon,
 
         filled: true,
-        fillColor: const Color(0xffFCFAF7),
+        fillColor: Color(0xffFCFAF7),
 
-        contentPadding: const EdgeInsets.symmetric(
+        contentPadding: EdgeInsets.symmetric(
           horizontal: 18,
           vertical: 18,
         ),
@@ -55,7 +55,7 @@ class CustomTextField extends StatelessWidget {
 
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             color: AppColors.darkGold,
             width: 1.5,
           ),

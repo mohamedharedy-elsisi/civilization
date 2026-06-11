@@ -21,8 +21,7 @@ class CategoryScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor:
-      const Color(
-          0xffF7F4EE),
+      Color(0xffF7F4EE),
       appBar: AppBar(
         title: Text(title,
           style: TextStyle(
@@ -30,17 +29,11 @@ class CategoryScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),),
         backgroundColor:
-        const Color(
-            0xffF7F4EE),
-      ),
+        Color(0xffF7F4EE),),
 
       body: GridView.builder(
-
-        padding:
-        const EdgeInsets.all(16),
-
-        gridDelegate:
-        const SliverGridDelegateWithFixedCrossAxisCount(
+        padding: EdgeInsets.all(16),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
 
           crossAxisCount: 2,
           crossAxisSpacing: 15,
@@ -49,20 +42,13 @@ class CategoryScreen extends StatelessWidget {
         ),
 
         itemCount: items.length,
-
         itemBuilder:
             (context, index) {
 
-          final item =
-          items[index];
-
+          final item = items[index];
           return CustomCard(
-
-            imageUrl:
-            item.image,
-
-            title:
-            item.name,
+            imageUrl: item.image,
+            title: item.name,
           );
         },
       ),

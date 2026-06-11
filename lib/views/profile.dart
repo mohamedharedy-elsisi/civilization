@@ -157,17 +157,17 @@ class _profileState extends State<profile> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: const Color(0xffF7F4EE),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Profile",
+        title: Text("Profile",
           style: TextStyle(
             color: AppColors.darkGold,
             fontWeight: FontWeight.bold,
           ),
         ),
 
-        backgroundColor: const Color(0xffF7F4EE),
+        backgroundColor: AppColors.background,
         elevation: 0,
 
         automaticallyImplyLeading: false,

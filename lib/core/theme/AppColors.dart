@@ -5,6 +5,9 @@ class AppColors {
 
   static const Color primaryGold = Color(0xFFB8863B);
 
+  // static const Color 2B = Color(0xff8B5E2B);
+  static const Color font_elfra = Color(0xff8B5E2B);
+
   static const Color darkGold = Color(0xFF8B642E);
 
   static const Color lightGold = Color(0xFFD4AF37);

@@ -8,5 +8,5 @@ class AppConstant {
 
   static const String facebookIcon =
       "assets/icons/facebook.png";
-  static const String background = "assets/backgrounds/background.png";
+  static const String background = "assets/backgrounds/background22.jpeg";
 }

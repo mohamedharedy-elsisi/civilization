@@ -13,7 +13,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await FavoritesService.init();
-  // await Hive.box("favorites").clear();
+  await Hive.box("favorites").clear();
   await Firebase.initializeApp();
   runApp(const MyApp());
 }

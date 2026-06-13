@@ -1,23 +1,24 @@
 import 'package:civilization/core/theme/AppColors.dart';
 import 'package:flutter/material.dart';
-
+import 'package:carousel_slider/carousel_slider.dart';
 import '../core/services/favorites_service.dart';
 
 
 class DetailsScreen extends StatefulWidget {
 
 
+  final List<String> images;
   final int id;
   final String arabicName;
   final String title;
-  final String image;
+  // final String image;
   final String description;
 
   const DetailsScreen({
     super.key,
     required this.title,
-    required this.image,
-    required this.description, required this.arabicName, required this.id,
+    // required this.image,
+    required this.description, required this.arabicName, required this.id, required this.images,
   });
 
   @override
@@ -43,14 +44,29 @@ class _DetailsScreenState extends State<DetailsScreen> {
           CrossAxisAlignment.start,
 
           children: [
-            ClipRRect(
-              borderRadius:
-              BorderRadius.circular(20),
-              child: Image.network(widget.image,
-                width: double.infinity,
+            CarouselSlider(
+              options: CarouselOptions(
                 height: 250,
-                fit: BoxFit.cover,
+                viewportFraction: 1,
+                autoPlay: true,
+                enableInfiniteScroll: false,
+                enlargeCenterPage: false,
               ),
+
+              items: widget.images.map(
+                    (image) {
+                  return ClipRRect(
+                    borderRadius:
+                    BorderRadius.circular(
+                      20,
+                    ),
+                    child: Image.network(
+                      image, width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                },
+              ).toList(),
             ),
 
             SizedBox(height: 20),
@@ -131,7 +147,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         "id": widget.id,
                         "name": widget.title,
                         "arabic_name": widget.arabicName,
-                        "image": widget.image,
+                        "image": widget.images.first,
                         "description": widget.description,
                       });
 

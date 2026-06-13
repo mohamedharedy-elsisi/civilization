@@ -171,8 +171,17 @@ class _homeState extends State<home> {
                       Navigator.push(context,
                         MaterialPageRoute(
                           builder: (_) =>
-                              CategoryScreen(title: "Statues",
+                              CategoryScreen(
+                                title: "Statues",
                                 items: statues,
+                                imageBuilder: (item) => item.image,
+                                detailsBuilder: (item) => DetailsScreen(
+                                  id: item.id,
+                                  title: item.name,
+                                  arabicName: item.arabicName,
+                                  description: item.description,
+                                  images: [item.image],
+                                ),
                               ),
                         ),
                       );
@@ -199,7 +208,7 @@ class _homeState extends State<home> {
                               MaterialPageRoute(
                                 builder: (_) => DetailsScreen(
                                   title: statues[index].name,
-                                  image: statues[index].image,
+                                  images: [statues[index].image],
                                   description: statues[index].description,
                                   arabicName: statues[index].arabicName,
                                   id: statues[index].id,
@@ -239,6 +248,14 @@ class _homeState extends State<home> {
                               CategoryScreen(
                                 title: "Temples",
                                 items: temples,
+                                imageBuilder: (item) => item.image,
+                                detailsBuilder: (item) => DetailsScreen(
+                                  id: item.id,
+                                  title: item.name,
+                                  arabicName: item.arabicName,
+                                  description: item.description,
+                                  images: [item.image],
+                                ),
                               ),
                         ),
                       );
@@ -269,7 +286,7 @@ class _homeState extends State<home> {
                               MaterialPageRoute(
                                 builder: (_) => DetailsScreen(
                                   title: temples[index].name,
-                                  image: temples[index].image,
+                                  images: [temples[index].image],
                                   description: temples[index].description, arabicName: temples[index].arabicName,
                                   id: temples[index].id,
                                 ),
@@ -305,7 +322,18 @@ class _homeState extends State<home> {
                       Navigator.push(context,
                         MaterialPageRoute(
                           builder: (_) =>
-                              CategoryScreen(title: "Museums", items: museums,),
+                              CategoryScreen(
+                                title: "Museums",
+                                items: museums,
+                                imageBuilder: (item) => item.image,
+                                detailsBuilder: (item) => DetailsScreen(
+                                  id: item.id,
+                                  title: item.name,
+                                  arabicName: item.arabicName,
+                                  description: item.description,
+                                  images: [item.image],
+                                ),
+                              ),
                         ),
                       );
                     },
@@ -336,7 +364,7 @@ class _homeState extends State<home> {
                               MaterialPageRoute(
                                 builder: (_) => DetailsScreen(
                                   title: museums[index].name,
-                                  image: museums[index].image,
+                                  images: [museums[index].image],
                                   description: museums[index].description, arabicName: museums[index].arabicName,
                                   id: museums[index].id,
                                 ),
@@ -375,6 +403,14 @@ class _homeState extends State<home> {
                               CategoryScreen(
                                 title: "Pharaohs",
                                 items: pharaohs,
+                                imageBuilder: (item) => item.image,
+                                detailsBuilder: (item) => DetailsScreen(
+                                  id: item.id,
+                                  title: item.name,
+                                  arabicName: item.arabicName,
+                                  description: item.description,
+                                  images: [item.image],
+                                ),
                               ),
                         ),
                       );
@@ -404,7 +440,7 @@ class _homeState extends State<home> {
                               MaterialPageRoute(
                                 builder: (_) => DetailsScreen(
                                   title: pharaohs[index].name,
-                                  image: pharaohs[index].image,
+                                  images: [pharaohs[index].image],
                                   description: pharaohs[index].description, arabicName: pharaohs[index].arabicName,
                                   id: pharaohs[index].id,
                                 ),
@@ -443,6 +479,14 @@ class _homeState extends State<home> {
                               CategoryScreen(
                                 title: "Obelisks",
                                 items: obelisks,
+                                imageBuilder: (item) => item.images.first,
+                                detailsBuilder: (item) => DetailsScreen(
+                                  id: item.id,
+                                  title: item.name,
+                                  arabicName: item.arabicName,
+                                  description: item.builder,
+                                  images: item.images,
+                                ),
                               ),
                         ),
                       );
@@ -472,9 +516,10 @@ class _homeState extends State<home> {
                               MaterialPageRoute(
                                 builder: (_) => DetailsScreen(
                                   title: obelisks[index].name,
-                                  image: obelisks[index].images[0],
+                                  // image: obelisks[index].images[0],
                                   description: obelisks[index].builder, arabicName: obelisks[index].arabicName,
                                   id: obelisks[index].id,
+                                  images: obelisks[index].images,
                                 ),
                               ),
                             );

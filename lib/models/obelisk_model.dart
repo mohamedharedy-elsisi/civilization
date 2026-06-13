@@ -6,7 +6,7 @@ class ObeliskModel {
   final String location;
   final String historicalEra;
   final String builder;
-  final List<dynamic> images;
+  final List<String> images;
 
   ObeliskModel({
     required this.id,
@@ -29,7 +29,7 @@ class ObeliskModel {
       location: json["location"],
       historicalEra: json["historical_era"],
       builder: json["builder"],
-      images: json["images"],
+      images: List<String>.from(json['images'],),
     );
   }
 }

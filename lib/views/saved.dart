@@ -95,10 +95,10 @@ class _savedState
                 MaterialPageRoute(
                   builder: (_) =>
                       DetailsScreen(
-                        id: item["id"],
+                        id: item["id"] ?? 0,
                         title: item["name"],
                         arabicName: item["arabic_name"],
-                        image: item["image"],
+                        images: [item["image"]],
                         description: item["description"] ?? "",
                       ),
                 ),
@@ -107,7 +107,7 @@ class _savedState
 
             onSavePressed: () {
               showRemoveDialog(
-                context, item["id"],);
+                context, item["id"] ?? 0,);
             },
           );
         },

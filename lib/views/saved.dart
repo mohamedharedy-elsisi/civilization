@@ -8,12 +8,10 @@ class saved extends StatefulWidget {
   const saved({super.key});
 
   @override
-  State<saved> createState() =>
-      _savedState();
+  State<saved> createState() => _savedState();
 }
 
-class _savedState
-    extends State<saved> {
+class _savedState extends State<saved> {
 
   Future<void> showRemoveDialog(
       BuildContext context,
@@ -52,20 +50,13 @@ class _savedState
   }
 
   @override
-  Widget build(
-      BuildContext context) {
-
+  Widget build(BuildContext context) {
     final favorites = FavoritesService.getFavorites();
-
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back,),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
         backgroundColor: AppColors.background,
         elevation: 0,
         title: Text("Saved", style: TextStyle(fontWeight: FontWeight.bold , color: AppColors.darkGold,),

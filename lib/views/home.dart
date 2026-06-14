@@ -14,6 +14,7 @@ import '../repositories/statues_repository.dart';
 import '../repositories/temples_repository.dart';
 import '../repositories/museums_repository.dart';
 import '../repositories/obelisks_repository.dart';
+import '../widgets/section_title.dart';
 import 'CategoryScreen.dart';
 import 'DetailsScreen.dart';
 
@@ -117,14 +118,10 @@ class _homeState extends State<home> {
               ),
 
               SizedBox(height: 16),
-              SizedBox(
-                height: 50,
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "Search...",
-                    prefixIcon: Icon(Icons.search,),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(25),),
-                  ),
+              TextField(
+                decoration: InputDecoration(
+                  hintText: "Search...",
+                  prefixIcon: Icon(Icons.search),
                 ),
               ),
               SizedBox(height: 20),
@@ -158,13 +155,7 @@ class _homeState extends State<home> {
                 MainAxisAlignment.spaceBetween,
 
                 children: [
-                  Text("Statues",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.font_elfra,
-                    ),
-                  ),
+                  SectionTitle(title: "Statues"),
 
                   IconButton(
                     onPressed: () {
@@ -232,14 +223,7 @@ class _homeState extends State<home> {
                 MainAxisAlignment.spaceBetween,
 
                 children: [
-                  Text("Temples",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.font_elfra,
-                    ),
-                  ),
-
+                SectionTitle(title: "Temples"),
                   IconButton(
                     onPressed: () {
                       Navigator.push(context,
@@ -309,14 +293,7 @@ class _homeState extends State<home> {
                 MainAxisAlignment.spaceBetween,
 
                 children: [
-                  Text("Museums",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.font_elfra,
-                    ),
-                  ),
-
+                  SectionTitle(title: "Museums"),
                   IconButton(
                     onPressed: () {
                       Navigator.push(context,
@@ -387,14 +364,7 @@ class _homeState extends State<home> {
                 MainAxisAlignment.spaceBetween,
 
                 children: [
-                  Text("Pharaohs",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.font_elfra,
-                    ),
-                  ),
-
+                  SectionTitle(title: "Pharaohs"),
                   IconButton(
                     onPressed: () {
                       Navigator.push(context,
@@ -463,14 +433,7 @@ class _homeState extends State<home> {
                 MainAxisAlignment.spaceBetween,
 
                 children: [
-                  Text("Obelisks",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.font_elfra,
-                    ),
-                  ),
-
+                  SectionTitle(title: "Obelisks"),
                   IconButton(
                     onPressed: () {
                       Navigator.push(context,

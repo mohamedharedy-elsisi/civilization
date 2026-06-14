@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../views/chat.dart';
-import '../../views/home.dart';
-import '../../views/profile.dart';
-import '../../views/saved.dart';
-import '../../views/scan.dart';
-import '../theme/AppColors.dart';
+import '../views/chatbot/chat.dart';
+import '../views/home.dart';
+import '../views/profile.dart';
+import '../views/saved.dart';
+import '../views/scan.dart';
+import '../core/theme/AppColors.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -37,12 +37,14 @@ class _MainLayoutState
     return Scaffold(
       backgroundColor: AppColors.background,
       body: screens[currentIndex],
-      floatingActionButton: GestureDetector(
-        onTap: () {},
-        child: Container(
-          width: 60,
-          height: 60,
+      floatingActionButton:
 
+      currentIndex == 0 ? GestureDetector(
+        onTap: () {
+          // TODO:
+          // Artifact Scanner
+        },
+        child: Container(width: 60, height: 60,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
 
@@ -71,7 +73,7 @@ class _MainLayoutState
             ),
           ),
         ),
-      ),
+      ):null,
 
       floatingActionButtonLocation:
       FloatingActionButtonLocation.endFloat,
@@ -133,11 +135,9 @@ class _MainLayoutState
 
   }) {
 
-    final bool isSelected =
-        currentIndex == index;
+    final bool isSelected = currentIndex == index;
 
     return GestureDetector(
-
       onTap: () {
         setState(() {
           currentIndex = index;
@@ -151,9 +151,7 @@ class _MainLayoutState
 
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-
           color: isSelected ? Color(0xffD4AF37).withOpacity(.2) : Colors.transparent,
-
           borderRadius: BorderRadius.circular(15),
         ),
 

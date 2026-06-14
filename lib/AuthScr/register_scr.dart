@@ -2,13 +2,13 @@ import 'package:civilization/core/theme/AppColors.dart';
 import 'package:civilization/AuthScr/login_scr.dart';
 import 'package:flutter/material.dart';
 import '../core/static/OrDivider.dart';
-import '../core/constant.dart';
+import '../core/constant/constant.dart';
 // import '../core/services/FacebookAuthService.dart';
 import '../core/services/GoogleAuthService.dart';
 import '../core/static/customLogo.dart';
 import '../core/static/customTextFeild.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../core/static/mainLayout.dart';
+import '../widgets/mainLayout.dart';
 class RegisterScr extends StatefulWidget {
   const RegisterScr({super.key});
 

@@ -3,11 +3,11 @@ import 'package:civilization/AuthScr/forgetPassword_scr.dart';
 import 'package:civilization/AuthScr/register_scr.dart';
 import 'package:flutter/material.dart';
 import '../core/static/OrDivider.dart';
-import '../core/constant.dart';
+import '../core/constant/constant.dart';
 import '../core/services/GoogleAuthService.dart';
 import '../core/static/customLogo.dart';
 import '../core/static/customTextFeild.dart';
-import '../core/static/mainLayout.dart';
+import '../widgets/mainLayout.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScr extends StatefulWidget {

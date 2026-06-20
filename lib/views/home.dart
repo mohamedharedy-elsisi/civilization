@@ -1,3 +1,4 @@
+import 'package:civilization/views/search_screen.dart';
 import 'package:flutter/material.dart';
 import '../core/static/QuotesCard.dart';
 import '../core/static/customCard.dart';
@@ -119,15 +120,21 @@ class _homeState extends State<home> {
 
               SizedBox(height: 16),
               TextField(
+                readOnly: true,
+                onTap: () {
+                  Navigator.push(context,
+                    MaterialPageRoute(
+                      builder: (_) => SearchScreen(),
+                    ),
+                  );
+                },
                 decoration: InputDecoration(
                   hintText: "Search...",
                   prefixIcon: Icon(Icons.search),
                 ),
               ),
               SizedBox(height: 20),
-
               sectionTitle("Quotes"),
-
               SizedBox(height: 220,
                 child:
                 ListView.builder(
@@ -447,7 +454,7 @@ class _homeState extends State<home> {
                                   id: item.id,
                                   title: item.name,
                                   arabicName: item.arabicName,
-                                  description: item.builder,
+                                  description: item.description,
                                   images: item.images,
                                 ),
                               ),
@@ -480,7 +487,8 @@ class _homeState extends State<home> {
                                 builder: (_) => DetailsScreen(
                                   title: obelisks[index].name,
                                   // image: obelisks[index].images[0],
-                                  description: obelisks[index].builder, arabicName: obelisks[index].arabicName,
+                                  description: obelisks[index].description,
+                                  arabicName: obelisks[index].arabicName,
                                   id: obelisks[index].id,
                                   images: obelisks[index].images,
                                 ),

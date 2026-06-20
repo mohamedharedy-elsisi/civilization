@@ -6,6 +6,7 @@ class ObeliskModel {
   final String location;
   final String historicalEra;
   final String builder;
+  final String description;
   final List<String> images;
 
   ObeliskModel({
@@ -17,6 +18,7 @@ class ObeliskModel {
     required this.historicalEra,
     required this.builder,
     required this.images,
+    required this.description,
   });
 
   factory ObeliskModel.fromJson(
@@ -29,6 +31,7 @@ class ObeliskModel {
       location: json["location"],
       historicalEra: json["historical_era"],
       builder: json["builder"],
+      description: json["description"],
       images: List<String>.from(json['images'],),
     );
   }

@@ -4,10 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../core/constant/constant.dart';
 
 class profile extends StatefulWidget {
@@ -366,7 +367,7 @@ class _profileState extends State<profile> {
 
               const SizedBox(height: 25),
 
-              profileItem("Settings"),
+              profileItem("Setting"),
 
               const SizedBox(height: 25),
 

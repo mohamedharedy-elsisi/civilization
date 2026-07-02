@@ -65,7 +65,7 @@ class _LoginScrState extends State<LoginScr> {
                     // const SizedBox(height: 55),
 
                     // Title
-                    const Text(
+                    Text(
                       "Login",
                       style: TextStyle(
                         fontSize: 42,
@@ -246,7 +246,7 @@ class _LoginScrState extends State<LoginScr> {
 
                       children: [
 
-                        const Text(
+                        Text(
                           "I Don’t Have Account? ",
 
                           style: TextStyle(

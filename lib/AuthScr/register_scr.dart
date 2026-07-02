@@ -68,7 +68,7 @@ class _RegisterScrState extends State<RegisterScr> {
                     // const SizedBox(height: 40),
 
                     // Title
-                    const Text(
+                    Text(
                       "Register",
                       style: TextStyle(
                         fontSize: 40,
@@ -301,7 +301,7 @@ class _RegisterScrState extends State<RegisterScr> {
 
                       children: [
 
-                        const Text(
+                        Text(
                           "Already Have Account? ",
 
                           style: TextStyle(

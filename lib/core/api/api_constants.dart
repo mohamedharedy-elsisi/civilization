@@ -19,4 +19,6 @@ class ApiConstants {
       "$baseUrl/api/museums";
   static const String quotes =
       "$baseUrl/api/quotes";
+  static const String pyramids =
+      "$baseUrl/api/pyramids";
 }

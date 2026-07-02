@@ -20,7 +20,7 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
-      cursorColor: AppColors.darkGold,
+      cursorColor: Theme.of(context).iconTheme.color,
       decoration: InputDecoration(
         hintText: hintText,
 
@@ -56,7 +56,7 @@ class CustomTextField extends StatelessWidget {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(
-            color: AppColors.darkGold,
+            color: Colors.grey.shade300,
             width: 1.5,
           ),
         ),

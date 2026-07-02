@@ -1,8 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../theme/AppColors.dart';
 
 class CustomCard extends StatelessWidget {
-
   final String imageUrl;
   final String title;
 
@@ -14,77 +14,63 @@ class CustomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       width: 280,
-      margin: const EdgeInsets.only(
-        right: 15,
-      ),
-
+      margin: const EdgeInsets.only(right: 15),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius:
-        BorderRadius.circular(20),
-
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1,),
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 8,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
-
       child: Column(
-        crossAxisAlignment:
-        CrossAxisAlignment.start,
-
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: ClipRRect(
-              borderRadius:
-              BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
               ),
-
-              child: Image.network(
-                imageUrl,
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                loadingBuilder: (context, child, progress,)
-                {
-                  if (progress == null) {
-                    return child;
-                  }
 
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
+                placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                  ),
+                ),
 
-                errorBuilder: (context, error, stackTrace,)
-                {
-                  return const Center(
-                    child: Icon(Icons.broken_image, size: 50)
-                  );
-                },
+                errorWidget: (context, url, error) => const Center(
+                  child: Icon(
+                    Icons.broken_image,
+                    size: 50,
+                  ),
+                ),
+
+                fadeInDuration: const Duration(milliseconds: 200),
+                fadeOutDuration: const Duration(milliseconds: 200),
               ),
             ),
           ),
 
           Padding(
-            padding:
-            EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             child: Text(
               title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 16,
-                fontWeight:
-                FontWeight.bold,
-                color: AppColors.font_elfra,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
               ),
             ),
           ),

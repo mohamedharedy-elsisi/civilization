@@ -31,7 +31,7 @@ class scan extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.darkGold,
+                    color:Theme.of(context).iconTheme.color,
                   ),
                 ),
               ],

@@ -49,12 +49,11 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-      AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
-        title: const Text("Search"),
+        title: Text("Search",style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color,)),
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -79,10 +78,10 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: CircularProgressIndicator(),
               )
                   : controller.text.isEmpty ? Center(
-                child: Text("Start typing to search"),
+                child: Text("Start typing to search",style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color,)),
               )
-                  : results.isEmpty ? const Center(
-                child: Text("No Results Found"),
+                  : results.isEmpty ? Center(
+                child: Text("No Results Found",style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color,)),
               )
                   : ListView.builder(
                 itemCount: results.length,

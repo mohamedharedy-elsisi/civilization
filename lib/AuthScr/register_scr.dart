@@ -73,7 +73,7 @@ class _RegisterScrState extends State<RegisterScr> {
                       style: TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.darkGold,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                       ),
                     ),
 
@@ -124,7 +124,7 @@ class _RegisterScrState extends State<RegisterScr> {
 
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.darkGold,
+                          backgroundColor: AppColors.primaryGold,
                           shadowColor: Colors.black26,
                           elevation: 4,
 
@@ -305,7 +305,7 @@ class _RegisterScrState extends State<RegisterScr> {
                           "Already Have Account? ",
 
                           style: TextStyle(
-                            color: AppColors.darkGold,
+                            color:Theme.of(context).iconTheme.color,
                             fontSize: 15,
                           ),
                         ),

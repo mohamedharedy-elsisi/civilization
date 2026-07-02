@@ -70,7 +70,7 @@ class _LoginScrState extends State<LoginScr> {
                       style: TextStyle(
                         fontSize: 42,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.darkGold,
+                        backgroundColor: Theme.of(context).textTheme.bodyLarge?.color,
                       ),
                     ),
 
@@ -131,7 +131,7 @@ class _LoginScrState extends State<LoginScr> {
 
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.darkGold,
+                          foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
                           shadowColor: Colors.black26,
                           elevation: 4,
 
@@ -248,9 +248,8 @@ class _LoginScrState extends State<LoginScr> {
 
                         Text(
                           "I Don’t Have Account? ",
-
                           style: TextStyle(
-                            color: AppColors.darkGold,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                             fontSize: 15,
                           ),
                         ),

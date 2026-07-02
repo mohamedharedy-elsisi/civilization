@@ -9,7 +9,7 @@ class ForgottenPasswordScr extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -31,7 +31,7 @@ class ForgottenPasswordScr extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.w400,
-                    color: AppColors.darkGold,
+                    color:Theme.of(context).iconTheme.color,
                   ),
                 ),
 
@@ -63,7 +63,7 @@ class ForgottenPasswordScr extends StatelessWidget {
                   height: 55,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.darkGold,
+                      iconColor: Theme.of(context).iconTheme.color,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),

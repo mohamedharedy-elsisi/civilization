@@ -21,8 +21,8 @@ class _savedState extends State<saved> {
     showDialog(
       context: context, builder: (_) {
         return AlertDialog(
-          title: Text("Remove Saved",style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.font_elfra,)),
-          content: Text("Do you want to remove this item from saved items?",style: TextStyle(color: AppColors.font_elfra,)),
+          title: Text("Remove Saved",style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyLarge?.color,)),
+          content: Text("Do you want to remove this item from saved items?",style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color,)),
 
           actions: [
             TextButton(
@@ -53,18 +53,18 @@ class _savedState extends State<saved> {
   Widget build(BuildContext context) {
     final favorites = FavoritesService.getFavorites();
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         centerTitle: true,
         automaticallyImplyLeading: false,
-        backgroundColor: AppColors.background,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
-        title: Text("Saved", style: TextStyle(fontWeight: FontWeight.bold , color: AppColors.darkGold,),
+        title: Text("Saved", style: TextStyle(fontWeight: FontWeight.bold , color: Theme.of(context).textTheme.bodyLarge?.color,),
         ),
       ),
 
       body: favorites.isEmpty ? Center(
-        child: Text("No Saved Items",),
+        child: Text("No Saved Items",style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color,)),
       )
           : ListView.builder(
 

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:civilization/core/theme/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -31,11 +32,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
-        title: Text("Details", style: TextStyle(fontWeight: FontWeight.bold , color: AppColors.darkGold,),
+        title: Text("Details", style: TextStyle(fontWeight: FontWeight.bold , color:Theme.of(context).iconTheme.color,),
         ),
       ),
 
@@ -56,16 +57,27 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   enlargeCenterPage: false,
                 ),
         
-                items: widget.images.map(
-                      (image) {
+                items: widget.images.map((image) {
                     return ClipRRect(
                       borderRadius:
-                      BorderRadius.circular(
-                        20,
+                      BorderRadius.circular(20,
                       ),
-                      child: Image.network(
-                        image, width: double.infinity,
+                      child: CachedNetworkImage(
+                        imageUrl: image,
+                        width: double.infinity,
                         fit: BoxFit.cover,
+                        placeholder: (context, url) => Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Center(
+                          child: Icon(Icons.broken_image,
+                            size: 50,
+                          ),
+                        ),
+
+                        fadeInDuration: Duration(milliseconds: 200),
                       ),
                     );
                   },
@@ -89,7 +101,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             fontSize: 22,
                             fontWeight:
                             FontWeight.bold,
-                            color: AppColors.font_elfra,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                         ),
         
@@ -160,7 +172,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         
                     icon: Icon(
                       FavoritesService.isFavorite(widget.id) ? Icons.bookmark : Icons.bookmark_border,
-                      color: AppColors.font_elfra,
+                      color:  Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                 ],
@@ -194,7 +206,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       child: Text(
                         isExpanded ? "Show Less" : "Show More",
                         style: TextStyle(
-                          color: AppColors.darkGold,
+                          color: Theme.of(context).iconTheme.color,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

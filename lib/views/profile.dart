@@ -1,5 +1,6 @@
 import 'package:civilization/AuthScr/login_scr.dart';
 import 'package:civilization/core/theme/AppColors.dart';
+import 'package:civilization/views/settings_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -143,9 +144,9 @@ class _profileState extends State<profile> {
       children: [
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 18,
-            color: AppColors.darkGold,
+            color:Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
         const SizedBox(height: 10),
@@ -158,17 +159,17 @@ class _profileState extends State<profile> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text("Profile",
           style: TextStyle(
-            color: AppColors.darkGold,
+            color:Theme.of(context).iconTheme.color,
             fontWeight: FontWeight.bold,
           ),
         ),
 
-        backgroundColor: AppColors.background,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
 
         automaticallyImplyLeading: false,
@@ -199,7 +200,7 @@ class _profileState extends State<profile> {
               //       style: TextStyle(
               //         fontSize: 22,
               //         fontWeight: FontWeight.bold,
-              //         color: AppColors.darkGold,
+              //         Theme.of(context).iconTheme.color,
               //       ),
               //     ),
               //   ],
@@ -293,10 +294,10 @@ class _profileState extends State<profile> {
                         BorderRadius.circular(20),
                       ),
 
-                      title: const Text(
+                      title: Text(
                         "Logout",
                         style: TextStyle(
-                          color: AppColors.darkGold,
+                          color:Theme.of(context).iconTheme.color,
                         ),
                       ),
                       content: const Text(
@@ -345,12 +346,12 @@ class _profileState extends State<profile> {
                     height: 28,
                   ),
 
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
 
-                  const Text(
+                  Text(
                     "Logout",
                     style: TextStyle(
-                      color: AppColors.darkGold,
+                      color:Theme.of(context).iconTheme.color,
                     ),
                   ),
                 ],
@@ -361,17 +362,44 @@ class _profileState extends State<profile> {
           ],
         ),
 
-              const SizedBox(height: 50),
 
-              profileItem("History"),
 
-              const SizedBox(height: 25),
+              SizedBox(height: 50),
 
-              profileItem("Setting"),
+              InkWell(
+                borderRadius: BorderRadius.circular(12),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const SettingsScreen(),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 8,
+                  ),
+                  child: Row(
+                    children: const [
+                      Icon(Icons.settings),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          "Settings",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      Icon(Icons.arrow_forward_ios, size: 18),
+                    ],
+                  ),
+                ),
+              ) ,
 
-              const SizedBox(height: 25),
-
-              profileItem("Privacy"),
             ],
           ),
         ),

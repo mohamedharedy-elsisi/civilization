@@ -3,10 +3,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'AuthScr/forgetPassword_scr.dart';
 import 'AuthScr/login_scr.dart';
 import 'core/services/favorites_service.dart';
+import 'core/theme/dark_theme.dart';
+import 'core/theme/light_theme.dart';
+import 'core/theme/theme_provider.dart';
 
 
 Future<void> main() async {
@@ -15,7 +19,12 @@ Future<void> main() async {
   await FavoritesService.init();
    // await Hive.box("favorites").clear();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,12 +32,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-       // home: LoginScr(),
-       home: RegisterScr(),
-       //  home: ForgottenPasswordScr(),
-      // home: splash_scr(),
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: LightTheme.theme,
+          darkTheme: DarkTheme.theme,
+          themeMode: themeProvider.themeMode,
+
+          home: RegisterScr(),
+        );
+      },
     );
   }
 }

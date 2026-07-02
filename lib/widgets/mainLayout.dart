@@ -34,7 +34,7 @@ class _MainLayoutState extends State<MainLayout> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: screens[currentIndex],
       floatingActionButton:
 

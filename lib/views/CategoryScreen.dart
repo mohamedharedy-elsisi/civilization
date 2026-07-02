@@ -23,14 +23,14 @@ class CategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(title,
           style: TextStyle(
-            color: AppColors.darkGold,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
             fontWeight: FontWeight.bold,
           ),),
-        backgroundColor: Color(0xffF7F4EE)
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: GridView.builder(
         padding: EdgeInsets.all(16),

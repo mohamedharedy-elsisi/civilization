@@ -93,7 +93,7 @@ class _homeState extends State<home> {
           fontSize: 24,
           fontWeight:
           FontWeight.bold,
-          color: AppColors.font_elfra,
+          color: Theme.of(context).textTheme.bodyLarge?.color,
         ),
       ),
     );
@@ -102,7 +102,7 @@ class _homeState extends State<home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: isLoading ? Center(
           child:
@@ -120,7 +120,7 @@ class _homeState extends State<home> {
                   fontSize: 30,
                   fontWeight:
                   FontWeight.bold,
-                  color: AppColors.font_elfra,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
 
@@ -191,9 +191,9 @@ class _homeState extends State<home> {
                       );
                     },
 
-                    icon: Icon(Icons.arrow_forward_ios, color: AppColors.font_elfra),
+                    icon: Icon(Icons.arrow_forward_ios,  color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
-                ],
+                  )],
               ),
 
               SizedBox(height: 260,
@@ -258,7 +258,7 @@ class _homeState extends State<home> {
                       );
                     },
 
-                    icon: Icon(Icons.arrow_forward_ios, color: AppColors.font_elfra,
+                    icon: Icon(Icons.arrow_forward_ios, color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                 ],
@@ -329,7 +329,7 @@ class _homeState extends State<home> {
                     },
                     icon: Icon(
                       Icons.arrow_forward_ios,
-                      color: AppColors.font_elfra,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                 ],
@@ -399,9 +399,9 @@ class _homeState extends State<home> {
                       );
                     },
 
-                    icon: Icon(Icons.arrow_forward_ios, color: AppColors.font_elfra),
+                    icon: Icon(Icons.arrow_forward_ios, color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
-                ],
+                  )],
               ),
 
               SizedBox(height: 260,
@@ -468,9 +468,9 @@ class _homeState extends State<home> {
                       );
                     },
 
-                    icon: Icon(Icons.arrow_forward_ios, color: AppColors.font_elfra),
+                    icon: Icon(Icons.arrow_forward_ios, color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
-                ],
+                  ) ],
               ),
 
               SizedBox(height: 260,
@@ -539,9 +539,9 @@ class _homeState extends State<home> {
                       );
                     },
 
-                    icon: Icon(Icons.arrow_forward_ios, color: AppColors.font_elfra),
+                    icon: Icon(Icons.arrow_forward_ios, color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
-                ],
+                  )],
               ),
               SizedBox(height: 260,
                 child:

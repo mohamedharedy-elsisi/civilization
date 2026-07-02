@@ -34,7 +34,7 @@ class SavedCard extends StatelessWidget {
 
         decoration:
         BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius:
           BorderRadius.circular(20,),
         ),
@@ -79,7 +79,7 @@ class SavedCard extends StatelessWidget {
                         fontSize: 18,
                         fontWeight:
                         FontWeight.bold,
-                          color: AppColors.font_elfra
+                          color:Theme.of(context).textTheme.bodyLarge?.color
                       ),
                     ),
 
@@ -91,7 +91,7 @@ class SavedCard extends StatelessWidget {
                       style:
                       TextStyle(
                         fontSize: 16,
-                          color: AppColors.font_elfra
+                          color:Theme.of(context).textTheme.bodyLarge?.color
                       ),
                     ),
                   ],
@@ -103,7 +103,7 @@ class SavedCard extends StatelessWidget {
               onPressed: onSavePressed,
               icon: Icon(
                 Icons.bookmark,
-                color: AppColors.font_elfra
+                  color:Theme.of(context).textTheme.bodyLarge?.color
               ),
             ),
           ],

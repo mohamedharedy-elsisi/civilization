@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../core/services/ai_service.dart';
 import '../views/chatbot/chat.dart';
 import '../views/home.dart';
 import '../views/profile.dart';
@@ -11,12 +12,10 @@ class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
 
   @override
-  State<MainLayout> createState() =>
-      _MainLayoutState();
+  State<MainLayout> createState() => _MainLayoutState();
 }
 
-class _MainLayoutState
-    extends State<MainLayout> {
+class _MainLayoutState extends State<MainLayout> {
 
   int currentIndex = 0;
   // int previousIndex = 0;
@@ -40,9 +39,8 @@ class _MainLayoutState
       floatingActionButton:
 
       currentIndex == 0 ? GestureDetector(
-        onTap: () {
-          // TODO:
-          // Artifact Scanner
+        onTap: () async {
+          await AIService.showImageSourceDialog(context);
         },
         child: Container(width: 60, height: 60,
           decoration: BoxDecoration(

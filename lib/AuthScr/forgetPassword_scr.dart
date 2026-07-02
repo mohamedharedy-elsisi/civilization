@@ -26,7 +26,7 @@ class ForgottenPasswordScr extends StatelessWidget {
                 const SizedBox(height: 60),
 
                 // Title
-                const Text(
+                Text(
                   "Forgot Password",
                   style: TextStyle(
                     fontSize: 36,

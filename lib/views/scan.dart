@@ -26,7 +26,7 @@ class scan extends StatelessWidget {
                     Icons.arrow_back,
                   ),
                 ),
-                const Text(
+                Text(
                   "Scan",
                   style: TextStyle(
                     fontSize: 22,

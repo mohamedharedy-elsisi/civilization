@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import '../core/static/QuotesCard.dart';
 import '../core/static/customCard.dart';
 import '../core/theme/AppColors.dart';
+import '../models/pyramid_model.dart';
 import '../models/quote_model.dart';
 import '../models/pharaoh_model.dart';
 import '../models/statue_model.dart';
 import '../models/temple_model.dart';
 import '../models/museum_model.dart';
 import '../models/obelisk_model.dart';
+import '../repositories/pyramid_repository.dart';
 import '../repositories/quotes_repository.dart';
 import '../repositories/pharaohs_repository.dart';
 import '../repositories/statues_repository.dart';
@@ -34,6 +36,7 @@ class _homeState extends State<home> {
   final TemplesRepository templesRepository = TemplesRepository();
   final MuseumsRepository museumsRepository = MuseumsRepository();
   final ObelisksRepository obelisksRepository = ObelisksRepository();
+  final PyramidsRepository pyramidsRepository = PyramidsRepository();
 
   List<QuoteModel> quotes = [];
   List<PharaohModel> pharaohs = [];
@@ -41,6 +44,7 @@ class _homeState extends State<home> {
   List<TempleModel> temples = [];
   List<MuseumModel> museums = [];
   List<ObeliskModel> obelisks = [];
+  List<PyramidModel> pyramids =[];
 
   bool isLoading = true;
 
@@ -60,6 +64,7 @@ class _homeState extends State<home> {
         templesRepository.getTemples(),
         museumsRepository.getMuseums(),
         obelisksRepository.getObelisks(),
+        pyramidsRepository.getPyramids()
       ]);
 
       quotes = results[0] as List<QuoteModel>;
@@ -68,6 +73,7 @@ class _homeState extends State<home> {
       temples = results[3] as List<TempleModel>;
       museums = results[4] as List<MuseumModel>;
       obelisks = results[5] as List<ObeliskModel>;
+      pyramids = results[6] as List<PyramidModel>;
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -505,6 +511,71 @@ class _homeState extends State<home> {
                 ),
               ),
               SizedBox(height: 30),
+              Row(
+                mainAxisAlignment:
+                MainAxisAlignment.spaceBetween,
+
+                children: [
+                  SectionTitle(title: "Pyramids"),
+
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              CategoryScreen(
+                                title: "Pyramids",
+                                items: pyramids,
+                                imageBuilder: (item) => item.image,
+                                detailsBuilder: (item) => DetailsScreen(
+                                  id: item.id,
+                                  title: item.name,
+                                  arabicName: item.arabicName,
+                                  description: item.description,
+                                  images: [item.image],
+                                ),
+                              ),
+                        ),
+                      );
+                    },
+
+                    icon: Icon(Icons.arrow_forward_ios, color: AppColors.font_elfra),
+                  ),
+                ],
+              ),
+              SizedBox(height: 260,
+                child:
+                ListView.builder(
+                  scrollDirection:
+                  Axis.horizontal,
+                  itemCount: pyramids.length > 5 ? 5 : pyramids.length,
+
+                  itemBuilder:
+                      (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => DetailsScreen(
+                              title: pyramids[index].name,
+                              images: [pyramids[index].image],
+                              description: pyramids[index].description,
+                              arabicName: pyramids[index].arabicName,
+                              id: pyramids[index].id,
+                            ),
+                          ),
+                        );
+                      },
+
+                      child: CustomCard(
+                        imageUrl: pyramids[index].image,
+                        title: pyramids[index].name,
+                      ),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),

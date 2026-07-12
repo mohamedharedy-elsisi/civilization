@@ -12,11 +12,11 @@ class SettingsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Settings"),
+        title: Text("Settings"),
         centerTitle: true,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         children: [
 
           Card(
@@ -25,7 +25,7 @@ class SettingsScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
             child: SwitchListTile(
-              contentPadding: const EdgeInsets.symmetric(
+              contentPadding: EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 8,
               ),
@@ -36,7 +36,7 @@ class SettingsScreen extends StatelessWidget {
                     : Icons.light_mode,
               ),
 
-              title: const Text(
+              title: Text(
                 "Dark Mode",
                 style: TextStyle(
                   fontSize: 18,

@@ -5,8 +5,6 @@ import '../views/chatbot/chat.dart';
 import '../views/home.dart';
 import '../views/profile.dart';
 import '../views/saved.dart';
-import '../views/scan.dart';
-import '../core/theme/AppColors.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -16,36 +14,34 @@ class MainLayout extends StatefulWidget {
 }
 
 class _MainLayoutState extends State<MainLayout> {
-
   int currentIndex = 0;
-  // int previousIndex = 0;
 
   final List<Widget> screens = [
-
     const home(),
-    const scan(),
-    const profile(),
     const chat(),
     const saved(),
-
+    const profile(),
   ];
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: screens[currentIndex],
-      floatingActionButton:
+      body: IndexedStack(
+        index: currentIndex,
+        children: screens,
+      ),
 
-      currentIndex == 0 ? GestureDetector(
+      floatingActionButton: currentIndex == 0
+          ? GestureDetector(
         onTap: () async {
           await AIService.showImageSourceDialog(context);
         },
-        child: Container(width: 60, height: 60,
-          decoration: BoxDecoration(
+        child: Container(
+          width: 60,
+          height: 60,
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
-
             gradient: LinearGradient(
               colors: [
                 Color(0xffF8E7A1),
@@ -53,7 +49,6 @@ class _MainLayoutState extends State<MainLayout> {
                 Color(0xff9E6B1A),
               ],
             ),
-
             boxShadow: [
               BoxShadow(
                 color: Colors.black26,
@@ -62,7 +57,6 @@ class _MainLayoutState extends State<MainLayout> {
               ),
             ],
           ),
-
           child: Center(
             child: Image.asset(
               "assets/icons/artifact.png",
@@ -71,17 +65,16 @@ class _MainLayoutState extends State<MainLayout> {
             ),
           ),
         ),
-      ):null,
+      )
+          : null,
 
-      floatingActionButtonLocation:
-      FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
 
       bottomNavigationBar: Container(
-
         height: 75,
         margin: EdgeInsets.all(15),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(25),
           boxShadow: [
             BoxShadow(
@@ -90,35 +83,24 @@ class _MainLayoutState extends State<MainLayout> {
             ),
           ],
         ),
-
         child: Row(
-          mainAxisAlignment:
-          MainAxisAlignment.spaceAround,
-
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             navItem(
               index: 0,
               image: "assets/icons/home.png",
             ),
-
             navItem(
               index: 1,
-              image: "assets/icons/scan.png",
-            ),
-
-            navItem(
-              index: 2,
-              image: "assets/icons/user2.png",
-            ),
-
-            navItem(
-              index: 3,
               image: "assets/icons/chat.png",
             ),
-
             navItem(
-              index: 4,
+              index: 2,
               image: "assets/icons/saved.png",
+            ),
+            navItem(
+              index: 3,
+              image: "assets/icons/user2.png",
             ),
           ],
         ),
@@ -127,12 +109,9 @@ class _MainLayoutState extends State<MainLayout> {
   }
 
   Widget navItem({
-
     required int index,
     required String image,
-
   }) {
-
     final bool isSelected = currentIndex == index;
 
     return GestureDetector(
@@ -141,19 +120,17 @@ class _MainLayoutState extends State<MainLayout> {
           currentIndex = index;
         });
       },
-
       child: AnimatedContainer(
-        duration: Duration(
-          milliseconds: 250,
-        ),
-
+        duration: const Duration(milliseconds: 250),
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: isSelected ? Color(0xffD4AF37).withOpacity(.2) : Colors.transparent,
+          color: isSelected
+              ? const Color(0xffD4AF37).withOpacity(.2)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(15),
         ),
-
-        child: Image.asset(image,
+        child: Image.asset(
+          image,
           width: isSelected ? 30 : 24,
           height: isSelected ? 30 : 24,
         ),
@@ -161,5 +138,3 @@ class _MainLayoutState extends State<MainLayout> {
     );
   }
 }
-
-

@@ -149,7 +149,7 @@ class _profileState extends State<profile> {
             color:Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
         const Divider(thickness: 1),
       ],
     );
@@ -177,7 +177,7 @@ class _profileState extends State<profile> {
 
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 12,
           ),
@@ -191,11 +191,11 @@ class _profileState extends State<profile> {
               //       onPressed: () {
               //         Navigator.pop(context);
               //       },
-              //       icon: const Icon(
+              //       icon: Icon(
               //         Icons.arrow_back,
               //       ),
               //     ),
-              //     const Text(
+              //     Text(
               //       "Profile",
               //       style: TextStyle(
               //         fontSize: 22,
@@ -205,7 +205,7 @@ class _profileState extends State<profile> {
               //     ),
               //   ],
               // ),
-              //  const SizedBox(height: 40),
+              //  SizedBox(height: 40),
         Row(
           children: [
             GestureDetector(
@@ -243,7 +243,7 @@ class _profileState extends State<profile> {
               ),
             ),
 
-            const SizedBox(width: 15),
+            SizedBox(width: 15),
 
             Expanded(
               child: Column(
@@ -262,7 +262,7 @@ class _profileState extends State<profile> {
                     ),
                   ),
 
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
 
                   Text(
                     user?.email ?? "",
@@ -270,7 +270,7 @@ class _profileState extends State<profile> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
 
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.grey,
                     ),
                   ),
@@ -300,7 +300,7 @@ class _profileState extends State<profile> {
                           color:Theme.of(context).iconTheme.color,
                         ),
                       ),
-                      content: const Text(
+                      content: Text(
                         "Are you sure you want to logout?",
                       ),
 
@@ -311,7 +311,7 @@ class _profileState extends State<profile> {
                             Navigator.pop(context);
                           },
 
-                          child: const Text(
+                          child: Text(
                             "Cancel",
                           ),
                         ),
@@ -325,7 +325,7 @@ class _profileState extends State<profile> {
 
                           },
 
-                          child: const Text(
+                          child: Text(
                             "Logout",
                             style: TextStyle(
                               color: Colors.red,
@@ -377,7 +377,7 @@ class _profileState extends State<profile> {
                   );
                 },
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
+                  padding: EdgeInsets.symmetric(
                     vertical: 12,
                     horizontal: 8,
                   ),

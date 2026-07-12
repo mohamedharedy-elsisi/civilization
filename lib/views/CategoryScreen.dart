@@ -56,7 +56,7 @@ class CategoryScreen extends StatelessWidget {
             child: CustomCard(
               imageUrl: imageBuilder(item),
               title: item.name,
-            ),
+            )
           );
         },
       ),

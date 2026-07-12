@@ -1,4 +1,3 @@
-import 'package:civilization/core/theme/AppColors.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -6,6 +5,8 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final Widget? prefixIcon;
   final TextEditingController? controller;
+  final bool hasError;
+  final String? errorText;
 
   const CustomTextField({
     super.key,
@@ -13,6 +14,8 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.prefixIcon,
     this.controller,
+    this.hasError = false,
+    this.errorText,
   });
 
   @override
@@ -34,6 +37,8 @@ class CustomTextField extends StatelessWidget {
         filled: true,
         fillColor: Color(0xffFCFAF7),
 
+        errorText: hasError ? errorText : null,
+
         contentPadding: EdgeInsets.symmetric(
           horizontal: 18,
           vertical: 18,
@@ -41,23 +46,37 @@ class CustomTextField extends StatelessWidget {
 
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: BorderSide(
-            color: Colors.grey.shade300,
-          ),
         ),
 
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(
-            color: Colors.grey.shade300,
+            color: hasError ? Colors.red : Colors.grey.shade300,
+            width: hasError ? 2 : 1,
           ),
         ),
 
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(
-            color: Colors.grey.shade300,
-            width: 1.5,
+            color: hasError ? Colors.red : Colors.grey.shade300,
+            width: 2,
+          ),
+        ),
+
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: 2,
+          ),
+        ),
+
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: 2,
           ),
         ),
       ),

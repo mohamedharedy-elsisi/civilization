@@ -21,7 +21,44 @@ class _RegisterScrState extends State<RegisterScr> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  bool emailError = false;
+  bool passwordError = false;
+  bool confirmPasswordError = false;
+  String? emailErrorText;
+  String? passwordErrorText;
+  String? confirmPasswordErrorText;
 
+  @override
+  void initState() {
+    super.initState();
+
+    emailController.addListener(() {
+      if (emailError) {
+        setState(() {
+          emailError = false;
+          emailErrorText = null;
+        });
+      }
+    });
+
+    passwordController.addListener(() {
+      if (passwordError) {
+        setState(() {
+          passwordError = false;
+          passwordErrorText = null;
+        });
+      }
+    });
+
+    confirmPasswordController.addListener(() {
+      if (confirmPasswordError) {
+        setState(() {
+          confirmPasswordError = false;
+          confirmPasswordErrorText = null;
+        });
+      }
+    });
+  }
   @override
   void dispose() {
     nameController.dispose();
@@ -38,7 +75,7 @@ class _RegisterScrState extends State<RegisterScr> {
         width: double.infinity,
         height: double.infinity,
 
-        decoration: const BoxDecoration(
+        decoration:  BoxDecoration(
           image: DecorationImage(
             image: AssetImage(AppConstant.background),
             fit: BoxFit.cover,
@@ -52,20 +89,20 @@ class _RegisterScrState extends State<RegisterScr> {
 
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28),
+              padding: EdgeInsets.symmetric(horizontal: 28),
 
               child: SingleChildScrollView(
                 child: Column(
                   children: [
 
-                    // const SizedBox(height: 10),
+                    // SizedBox(height: 10),
 
                     // Logo
                     const CustomLogo(
                       size: 250,
                     ),
 
-                    // const SizedBox(height: 40),
+                    // SizedBox(height: 40),
 
                     // Title
                     Text(
@@ -77,45 +114,51 @@ class _RegisterScrState extends State<RegisterScr> {
                       ),
                     ),
 
-                    const SizedBox(height: 40),
+                    SizedBox(height: 40),
 
                     // Name
                     CustomTextField(
                       controller: nameController,
                       hintText: "Full Name",
-                      prefixIcon: const Icon(Icons.person_outline),
+                      prefixIcon: Icon(Icons.person_outline),
                     ),
 
-                    const SizedBox(height: 18),
+                    SizedBox(height: 18),
 
                     // Email
                     CustomTextField(
                       controller: emailController,
                       hintText: "Email",
-                      prefixIcon: const Icon(Icons.email_outlined),
+                      prefixIcon: Icon(Icons.email_outlined),
+                      hasError: emailError,
+                      errorText: emailErrorText,
                     ),
 
-                    const SizedBox(height: 18),
+                    SizedBox(height: 18),
 
                     // Password
                     CustomTextField(
                       controller: passwordController,
                       hintText: "Password",
                       obscureText: true,
-                      prefixIcon: const Icon(Icons.lock_outline),
+                      prefixIcon: Icon(Icons.lock_outline),
+                      hasError: passwordError,
+                      errorText: passwordErrorText,
                     ),
 
-                    const SizedBox(height: 18),
+                    SizedBox(height: 18),
 
                     // Confirm Password
                     CustomTextField(
                       controller: confirmPasswordController,
                       hintText: "Confirm Password",
                       obscureText: true,
-                      prefixIcon: const Icon(Icons.lock_outline),
+                      prefixIcon: Icon(Icons.lock_outline),
+                      hasError: confirmPasswordError,
+                      errorText: confirmPasswordErrorText,
                     ),
 
-                    const SizedBox(height: 30),
+                    SizedBox(height: 30),
 
                     // Register Button
                     SizedBox(
@@ -141,7 +184,7 @@ class _RegisterScrState extends State<RegisterScr> {
                               confirmPasswordController.text.trim().isEmpty) {
 
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Text(
                                   "Please fill all fields",
                                 ),
@@ -151,17 +194,13 @@ class _RegisterScrState extends State<RegisterScr> {
                             return;
                           }
 
-                          if (passwordController.text !=
-                              confirmPasswordController.text) {
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  "Passwords do not match",
-                                ),
-                              ),
-                            );
-
+                          if (passwordController.text != confirmPasswordController.text) {
+                            setState(() {
+                              passwordError = true;
+                              confirmPasswordError = true;
+                              passwordErrorText = "Passwords do not match";
+                              confirmPasswordErrorText = "Passwords do not match";
+                            });
                             return;
                           }
 
@@ -174,23 +213,62 @@ class _RegisterScrState extends State<RegisterScr> {
                               password: passwordController.text.trim(),
                             );
 
-                            await credential.user?.updateDisplayName(
+                            await credential.user!.updateDisplayName(
                               nameController.text.trim(),
                             );
 
-                            await FirebaseAuth.instance.currentUser
-                                ?.reload();
+                            try {
+                              await credential.user!.sendEmailVerification();
+                              debugPrint("Verification email sent");
+                            } catch (e) {
+                              debugPrint("Verification error: $e");
+                            }
 
                             if (!mounted) return;
 
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  "A verification email has been sent. Please verify your email before logging in.",
+                                ),
+                                duration: Duration(seconds: 4),
+                              ),
+                            );
+
+                            // تسجيل الخروج عشان المستخدم ميتحسبش مسجل دخول قبل كدا
+                            await FirebaseAuth.instance.signOut();
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => const MainLayout(),
+                                builder: (_) => const LoginScr(),
                               ),
                             );
 
                           } on FirebaseAuthException catch (e) {
+                            setState(() {
+                              emailError = false;
+                              passwordError = false;
+                              emailErrorText = null;
+                              passwordErrorText = null;
+                              switch (e.code) {
+                                case "email-already-in-use":
+                                  emailError = true;
+                                  emailErrorText = "Email already exists";
+                                  break;
+                                case "weak-password":
+                                  passwordError = true;
+                                  passwordErrorText = "Password is too weak";
+                                  break;
+                                case "invalid-email":
+                                  emailError = true;
+                                  emailErrorText = "Invalid email";
+                                  break;
+                                default:
+                                  emailError = true;
+                                  emailErrorText = "Registration failed";
+                              }
+                            });
+                          }on FirebaseAuthException catch (e) {
 
                             String message =
                                 "Registration Failed";
@@ -223,7 +301,7 @@ class _RegisterScrState extends State<RegisterScr> {
                           }
                         },
 
-                        child: const Text(
+                        child: Text(
                           "Create Account",
 
                           style: TextStyle(
@@ -235,12 +313,12 @@ class _RegisterScrState extends State<RegisterScr> {
                       ),
                     ),
 
-                    const SizedBox(height: 28),
+                    SizedBox(height: 28),
 
                     // Divider
                     const CustomDivider(),
 
-                    const SizedBox(height: 25),
+                    SizedBox(height: 25),
 
                     // Social Buttons
                     Row(
@@ -273,7 +351,7 @@ class _RegisterScrState extends State<RegisterScr> {
                           ),
                         ),
 
-                        const SizedBox(width: 30),
+                        // SizedBox(width: 30),
 
                         // Facebook
                         // GestureDetector(
@@ -293,7 +371,7 @@ class _RegisterScrState extends State<RegisterScr> {
                       ],
                     ),
 
-                    const SizedBox(height: 25),
+                    SizedBox(height: 25),
 
                     // Login
                     Row(
@@ -322,7 +400,7 @@ class _RegisterScrState extends State<RegisterScr> {
                             );
                           },
 
-                          child: const Text(
+                          child: Text(
                             "Login",
 
                             style: TextStyle(
@@ -335,7 +413,7 @@ class _RegisterScrState extends State<RegisterScr> {
                       ],
                     ),
 
-                    const SizedBox(height: 30),
+                    SizedBox(height: 30),
                   ],
                 ),
               ),

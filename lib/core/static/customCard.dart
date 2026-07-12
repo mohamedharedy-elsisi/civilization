@@ -16,7 +16,7 @@ class CustomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 280,
-      margin: const EdgeInsets.only(right: 15),
+      margin: EdgeInsets.only(right: 15),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
@@ -48,12 +48,19 @@ class CustomCard extends StatelessWidget {
                   ),
                 ),
 
-                errorWidget: (context, url, error) => const Center(
-                  child: Icon(
-                    Icons.broken_image,
-                    size: 50,
-                  ),
-                ),
+                errorWidget: (context, url, error) {
+                  debugPrint("Image Error:");
+                  debugPrint(url);
+                  debugPrint(error.toString());
+
+                  return const Center(
+                    child: Icon(
+                      Icons.error,
+                      color: Colors.red,
+                      size: 40,
+                    ),
+                  );
+                },
 
                 fadeInDuration: const Duration(milliseconds: 200),
                 fadeOutDuration: const Duration(milliseconds: 200),
@@ -62,7 +69,7 @@ class CustomCard extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(12),
             child: Text(
               title,
               maxLines: 2,

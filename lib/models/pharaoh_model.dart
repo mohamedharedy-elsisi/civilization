@@ -6,8 +6,8 @@ class PharaohModel {
   final String reign;
   final String capital;
   final String description;
-  final List<dynamic> achievements;
-  final String image;
+  final List<String> achievements;
+  final List<String> images;
 
   PharaohModel({
     required this.id,
@@ -18,7 +18,7 @@ class PharaohModel {
     required this.capital,
     required this.description,
     required this.achievements,
-    required this.image,
+    required this.images,
   });
 
   factory PharaohModel.fromJson(
@@ -31,8 +31,8 @@ class PharaohModel {
       reign: json["reign"],
       capital: json["capital"],
       description: json["description"],
-      achievements: json["achievements"],
-      image: json["image"],
+      achievements: List<String>.from(json["achievements"]),
+      images: List<String>.from(json["images"]),
     );
   }
 }

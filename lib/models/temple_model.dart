@@ -7,7 +7,7 @@ class TempleModel {
   final String builtBy;
   final String period;
   final String description;
-  final String image;
+  final List<String> images;
 
   TempleModel({
     required this.id,
@@ -18,7 +18,7 @@ class TempleModel {
     required this.builtBy,
     required this.period,
     required this.description,
-    required this.image,
+    required this.images,
   });
 
   factory TempleModel.fromJson(
@@ -32,7 +32,7 @@ class TempleModel {
       builtBy: json["built_by"],
       period: json["period"],
       description: json["description"],
-      image: json["image"],
+      images: List<String>.from(json["images"]),
     );
   }
 }

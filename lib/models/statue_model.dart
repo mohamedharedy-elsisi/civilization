@@ -7,7 +7,7 @@ class StatueModel {
   final String material;
   final double heightM;
   final String description;
-  final String image;
+  final List<String> images;
 
   StatueModel({
     required this.id,
@@ -18,7 +18,7 @@ class StatueModel {
     required this.material,
     required this.heightM,
     required this.description,
-    required this.image,
+     required this.images,
   });
 
   factory StatueModel.fromJson(
@@ -32,7 +32,7 @@ class StatueModel {
       material: json["material"],
       heightM: (json["height_m"] as num).toDouble(),
       description: json["description"],
-      image: json["image"],
+      images: List<String>.from(json["images"]),
     );
   }
 }

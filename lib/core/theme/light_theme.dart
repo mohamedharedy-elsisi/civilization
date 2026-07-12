@@ -36,11 +36,11 @@ class LightTheme {
 
       dividerColor: Colors.black12,
 
-      iconTheme: const IconThemeData(
+      iconTheme: IconThemeData(
         color: AppColors.darkGold,
       ),
 
-      textTheme: const TextTheme(
+      textTheme: TextTheme(
         bodyLarge: TextStyle(
           color: AppColors.font_elfra,
         ),

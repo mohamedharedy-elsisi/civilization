@@ -10,16 +10,21 @@ class FavoritesService {
 
   static Box get box => Hive.box(boxName);
 
-  static void addFavorite(
-      Map<String, dynamic> item) {
-
-    box.put(item["id"].toString(), item,);
+  static Future<void> addFavorite(
+      Map<String, dynamic> item,
+      ) async {
+    await box.put(
+      item["id"].toString(),
+      item,
+    );
   }
 
-  static void removeFavorite(int id) {
-    box.delete(id.toString());
-
-
+  static Future<void> removeFavorite(
+      int id,
+      ) async {
+    await box.delete(
+      id.toString(),
+    );
   }
 
   static bool isFavorite(int id) {

@@ -88,16 +88,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 itemBuilder: (context, index) {
 
                   final item = results[index];
-                  String image = "";
-                  if (item["image"] != null) {
-                    image = item["image"];
-                  }
-
-                  else if (
-                  item["images"] != null &&
-                      item["images"].isNotEmpty) {
-                    image = item["images"][0];
-                  }
+                  final String image = List<String>.from(
+                    item["images"],
+                  ).first;
 
                   return SavedCard(
                     title: item["name"] ?? "",
@@ -113,9 +106,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 arabicName: item["arabic_name"] ?? "",
                                 description: item["description"] ??
                                     item["builder"] ?? item["historical_era"] ?? "",
-                                images: item["images"] != null ? List<String>.from(
-                                  item["images"],
-                                ) : [item["image"]],
+                            images: List<String>.from(item["images"]),
                               ),
                         ),
                       );

@@ -7,7 +7,7 @@ class PyramidModel {
   final String builtBy;
   final String period;
   final String description;
-  final String image;
+  final List<String> images;
 
   PyramidModel({
     required this.id,
@@ -18,7 +18,7 @@ class PyramidModel {
     required this.builtBy,
     required this.period,
     required this.description,
-    required this.image,
+    required this.images,
   });
 
   factory PyramidModel.fromJson(Map<String, dynamic> json) {
@@ -31,7 +31,7 @@ class PyramidModel {
       builtBy: json["built_by"],
       period: json["period"],
       description: json["description"],
-      image: json["image"],
+      images: List<String>.from(json["images"]),
     );
   }
 }

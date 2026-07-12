@@ -20,7 +20,32 @@ class LoginScr extends StatefulWidget {
 class _LoginScrState extends State<LoginScr> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool emailError = false;
+  bool passwordError = false;
+  String? emailErrorText;
+  String? passwordErrorText;
+  @override
+  void initState() {
+    super.initState();
 
+    emailController.addListener(() {
+      if (emailError) {
+        setState(() {
+          emailError = false;
+          emailErrorText = null;
+        });
+      }
+    });
+
+    passwordController.addListener(() {
+      if (passwordError) {
+        setState(() {
+          passwordError = false;
+          passwordErrorText = null;
+        });
+      }
+    });
+  }
   @override
   void dispose() {
     emailController.dispose();
@@ -49,20 +74,20 @@ class _LoginScrState extends State<LoginScr> {
 
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28),
+              padding: EdgeInsets.symmetric(horizontal: 28),
 
               child: SingleChildScrollView(
                 child: Column(
                   children: [
 
-                    // const SizedBox(height: 55),
+                    // SizedBox(height: 55),
 
                     // Logo
                     const CustomLogo(
                       size: 250,
                     ),
 
-                    // const SizedBox(height: 55),
+                    // SizedBox(height: 55),
 
                     // Title
                     Text(
@@ -70,30 +95,34 @@ class _LoginScrState extends State<LoginScr> {
                       style: TextStyle(
                         fontSize: 42,
                         fontWeight: FontWeight.w500,
-                        backgroundColor: Theme.of(context).textTheme.bodyLarge?.color,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                       ),
                     ),
 
-                    const SizedBox(height: 45),
+                    SizedBox(height: 45),
 
                     // Email
                     CustomTextField(
                       controller: emailController,
                       hintText: "Email",
-                      prefixIcon: const Icon(Icons.email_outlined),
+                      prefixIcon: Icon(Icons.email_outlined),
+                      hasError: emailError,
+                      errorText: emailErrorText,
                     ),
 
-                    const SizedBox(height: 18),
+                    SizedBox(height: 18),
 
                     // Password
                     CustomTextField(
                       controller: passwordController,
                       hintText: "Password",
                       obscureText: true,
-                      prefixIcon: const Icon(Icons.lock_outline),
+                      prefixIcon: Icon(Icons.lock_outline),
+                      hasError: passwordError,
+                      errorText: passwordErrorText,
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
 
                     // Forgot Password
                     Align(
@@ -104,13 +133,12 @@ class _LoginScrState extends State<LoginScr> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                              const ForgottenPasswordScr(),
+                              builder: (context) => ForgottenPasswordScr(),
                             ),
                           );
                         },
 
-                        child: const Text(
+                        child: Text(
                           "Forgotten Password?",
 
                           style: TextStyle(
@@ -122,7 +150,7 @@ class _LoginScrState extends State<LoginScr> {
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
 
                     // Login Button
                     SizedBox(
@@ -131,7 +159,7 @@ class _LoginScrState extends State<LoginScr> {
 
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
+                          backgroundColor: AppColors.primaryGold,
                           shadowColor: Colors.black26,
                           elevation: 4,
 
@@ -141,38 +169,111 @@ class _LoginScrState extends State<LoginScr> {
                         ),
 
                         onPressed: () async {
-
                           try {
-
-                            await FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-
+                            final credential =
+                            await FirebaseAuth.instance.signInWithEmailAndPassword(
                               email: emailController.text.trim(),
                               password: passwordController.text.trim(),
                             );
+
+                            await credential.user!.reload();
+
+                            final user = FirebaseAuth.instance.currentUser!;
+
+                            if (!user.emailVerified) {
+                              await FirebaseAuth.instance.signOut();
+
+                              if (!mounted) return;
+
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text("Email Not Verified"),
+                                  content: Text(
+                                    "Please verify your email before logging in.",
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () async {
+                                        await user.sendEmailVerification();
+
+                                        if (context.mounted) {
+                                          Navigator.pop(context);
+
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                "Verification email sent again.",
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      child: Text("Resend"),
+                                    ),
+
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("OK"),
+                                    ),
+                                  ],
+                                ),
+                              );
+
+                              return;
+                            }
 
                             if (!mounted) return;
 
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => const MainLayout(),
+                                builder: (_) =>  MainLayout(),
                               ),
                             );
-
                           } on FirebaseAuthException catch (e) {
+                            setState(() {
+                              emailError = false;
+                              passwordError = false;
+                              emailErrorText = null;
+                              passwordErrorText = null;
 
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  e.message ?? "Login Failed",
-                                ),
-                              ),
-                            );
+                              switch (e.code) {
+                                case "user-not-found":
+                                  emailError = true;
+                                  emailErrorText = "Email not found";
+                                  break;
+
+                                case "wrong-password":
+                                  passwordError = true;
+                                  passwordErrorText = "Incorrect password";
+                                  break;
+
+                                case "invalid-email":
+                                  emailError = true;
+                                  emailErrorText = "Invalid email";
+                                  break;
+
+                                case "invalid-credential":
+                                  emailError = true;
+                                  passwordError = true;
+                                  emailErrorText = "Incorrect email";
+                                  passwordErrorText = "Incorrect password";
+                                  break;
+
+                                default:
+                                  emailError = true;
+                                  passwordError = true;
+                                  emailErrorText = "Login failed";
+                                  passwordErrorText = "Login failed";
+                              }
+                            });
                           }
                         },
 
-                        child: const Text(
+                        child: Text(
                           "Login",
 
                           style: TextStyle(
@@ -184,17 +285,17 @@ class _LoginScrState extends State<LoginScr> {
                       ),
                     ),
 
-                    const SizedBox(height: 28),
+                    SizedBox(height: 28),
 
                     // Divider
                     const CustomDivider(),
 
-                    const SizedBox(height: 25),
+                    SizedBox(height: 25),
 
                     // Social Buttons
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
 
                         // Google
@@ -221,7 +322,7 @@ class _LoginScrState extends State<LoginScr> {
                           ),
                         ),
 
-                        const SizedBox(width: 30),
+                        // SizedBox(width: 30),
 
                         // Facebook
                         // GestureDetector(
@@ -238,7 +339,7 @@ class _LoginScrState extends State<LoginScr> {
                       ],
                     ),
 
-                    const SizedBox(height: 25),
+                    SizedBox(height: 25),
 
                     // Register
                     Row(
@@ -265,7 +366,7 @@ class _LoginScrState extends State<LoginScr> {
                             );
                           },
 
-                          child: const Text(
+                          child: Text(
                             "Register",
 
                             style: TextStyle(
@@ -278,7 +379,7 @@ class _LoginScrState extends State<LoginScr> {
                       ],
                     ),
 
-                    const SizedBox(height: 30),
+                    SizedBox(height: 30),
                   ],
                 ),
               ),

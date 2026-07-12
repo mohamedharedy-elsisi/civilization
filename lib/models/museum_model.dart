@@ -5,7 +5,7 @@ class MuseumModel {
   final String city;
   final int established;
   final String description;
-  final String image;
+  final List<String> images;
   final double latitude;
   final double longitude;
 
@@ -16,9 +16,8 @@ class MuseumModel {
     required this.city,
     required this.established,
     required this.description,
-    required this.image,
     required this.latitude,
-    required this.longitude,
+    required this.longitude, required this.images,
   });
 
   factory MuseumModel.fromJson(
@@ -30,7 +29,7 @@ class MuseumModel {
       city: json["city"],
       established: json["established"],
       description: json["description"],
-      image: json["image"],
+      images: List<String>.from(json["images"]),
       latitude: (json["location"]["latitude"] as num)
           .toDouble(),
       longitude: (json["location"]["longitude"] as num)

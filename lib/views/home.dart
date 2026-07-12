@@ -1,22 +1,11 @@
+import 'package:civilization/views/cubits/home/home_cubit.dart';
+import 'package:civilization/views/cubits/home/home_state.dart';
 import 'package:civilization/views/search_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../core/static/QuotesCard.dart';
 import '../core/static/customCard.dart';
-import '../core/theme/AppColors.dart';
-import '../models/pyramid_model.dart';
-import '../models/quote_model.dart';
-import '../models/pharaoh_model.dart';
-import '../models/statue_model.dart';
-import '../models/temple_model.dart';
-import '../models/museum_model.dart';
-import '../models/obelisk_model.dart';
-import '../repositories/pyramid_repository.dart';
-import '../repositories/quotes_repository.dart';
-import '../repositories/pharaohs_repository.dart';
-import '../repositories/statues_repository.dart';
-import '../repositories/temples_repository.dart';
-import '../repositories/museums_repository.dart';
-import '../repositories/obelisks_repository.dart';
 import '../widgets/section_title.dart';
 import 'CategoryScreen.dart';
 import 'DetailsScreen.dart';
@@ -28,558 +17,548 @@ class home extends StatefulWidget {
   State<home> createState() => _homeState();
 }
 
-class _homeState extends State<home> {
-
-  final QuotesRepository quotesRepository = QuotesRepository();
-  final PharaohsRepository pharaohsRepository = PharaohsRepository();
-  final StatuesRepository statuesRepository = StatuesRepository();
-  final TemplesRepository templesRepository = TemplesRepository();
-  final MuseumsRepository museumsRepository = MuseumsRepository();
-  final ObelisksRepository obelisksRepository = ObelisksRepository();
-  final PyramidsRepository pyramidsRepository = PyramidsRepository();
-
-  List<QuoteModel> quotes = [];
-  List<PharaohModel> pharaohs = [];
-  List<StatueModel> statues = [];
-  List<TempleModel> temples = [];
-  List<MuseumModel> museums = [];
-  List<ObeliskModel> obelisks = [];
-  List<PyramidModel> pyramids =[];
-
-  bool isLoading = true;
-
+class _homeState extends State<home> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-    loadData();
-  }
 
-  Future<void> loadData() async {
-    try {
-      final results =
-      await Future.wait([
-        quotesRepository.getQuotes(),
-        pharaohsRepository.getPharaohs(),
-        statuesRepository.getStatues(),
-        templesRepository.getTemples(),
-        museumsRepository.getMuseums(),
-        obelisksRepository.getObelisks(),
-        pyramidsRepository.getPyramids()
-      ]);
+    final homeCubit = context.read<HomeCubit>();
 
-      quotes = results[0] as List<QuoteModel>;
-      pharaohs = results[1] as List<PharaohModel>;
-      statues = results[2] as List<StatueModel>;
-      temples = results[3] as List<TempleModel>;
-      museums = results[4] as List<MuseumModel>;
-      obelisks = results[5] as List<ObeliskModel>;
-      pyramids = results[6] as List<PyramidModel>;
-    } catch (e) {
-      debugPrint(e.toString());
+    if (homeCubit.state is HomeInitial) {
+      homeCubit.loadData();
     }
-
-    setState(() {
-      isLoading = false;
-    });
   }
 
-  Widget sectionTitle(
-      String title) {
-    return Padding(padding:
-      EdgeInsets.only(bottom: 12,),
+  Widget sectionTitle(String title) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12),
       child: Text(
         title,
         style: TextStyle(
           fontSize: 24,
-          fontWeight:
-          FontWeight.bold,
+          fontWeight: FontWeight.bold,
           color: Theme.of(context).textTheme.bodyLarge?.color,
         ),
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SafeArea(
-        child: isLoading ? Center(
-          child:
-          CircularProgressIndicator(),
-        )
-            : SingleChildScrollView(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment:
-            CrossAxisAlignment.start,
-
-            children: [
-              Text("Welcome to\nPharaonic civilization",
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight:
-                  FontWeight.bold,
-                  color: Theme.of(context).textTheme.bodyLarge?.color,
-                ),
+  Widget buildErrorState(HomeError state) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.error_outline,
+              size: 48,
+              color: Theme.of(context).colorScheme.error,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "Something went wrong",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
               ),
-
-              SizedBox(height: 16),
-              TextField(
-                readOnly: true,
-                onTap: () {
-                  Navigator.push(context,
-                    MaterialPageRoute(
-                      builder: (_) => SearchScreen(),
-                    ),
-                  );
-                },
-                decoration: InputDecoration(
-                  hintText: "Search...",
-                  prefixIcon: Icon(Icons.search),
-                ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              state.message,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyMedium?.color,
               ),
-              SizedBox(height: 20),
-              sectionTitle("Quotes"),
-              SizedBox(height: 220,
-                child:
-                ListView.builder(
-                  scrollDirection:
-                  Axis.horizontal,
-
-                  itemCount: quotes.length,
-                  itemBuilder:
-                      (context,
-                      index) {
-
-                        return QuoteCard(
-                          imagePath: "assets/quotes_img/quote1.jpeg",
-                          quote: quotes[index].quote,
-                          author: quotes[index].author,
-                        );
-                  },
-                ),
-              ),
-
-              SizedBox(height: 25),
-
-              Row(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceBetween,
-
-                children: [
-                  SectionTitle(title: "Statues"),
-
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              CategoryScreen(
-                                title: "Statues",
-                                items: statues,
-                                imageBuilder: (item) => item.image,
-                                detailsBuilder: (item) => DetailsScreen(
-                                  id: item.id,
-                                  title: item.name,
-                                  arabicName: item.arabicName,
-                                  description: item.description,
-                                  images: [item.image],
-                                ),
-                              ),
-                        ),
-                      );
-                    },
-
-                    icon: Icon(Icons.arrow_forward_ios,  color: Theme.of(context).textTheme.bodyLarge?.color,
-                  ),
-                  )],
-              ),
-
-              SizedBox(height: 260,
-                child:
-                ListView.builder(
-                  scrollDirection:
-                  Axis.horizontal,
-                  itemCount: statues.length > 5 ? 5 : statues.length,
-
-                  itemBuilder:
-                      (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => DetailsScreen(
-                                  title: statues[index].name,
-                                  images: [statues[index].image],
-                                  description: statues[index].description,
-                                  arabicName: statues[index].arabicName,
-                                  id: statues[index].id,
-                                ),
-                              ),
-                            );
-                          },
-
-                          child: CustomCard(
-                            imageUrl: statues[index].image,
-                            title: statues[index].name,
-                          ),
-                        );
-                  },
-                ),
-              ),
-
-              SizedBox(height: 25),
-              Row(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceBetween,
-
-                children: [
-                SectionTitle(title: "Temples"),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              CategoryScreen(
-                                title: "Temples",
-                                items: temples,
-                                imageBuilder: (item) => item.image,
-                                detailsBuilder: (item) => DetailsScreen(
-                                  id: item.id,
-                                  title: item.name,
-                                  arabicName: item.arabicName,
-                                  description: item.description,
-                                  images: [item.image],
-                                ),
-                              ),
-                        ),
-                      );
-                    },
-
-                    icon: Icon(Icons.arrow_forward_ios, color: Theme.of(context).textTheme.bodyLarge?.color,
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 260,
-                child:
-                ListView.builder(
-                  scrollDirection:
-                  Axis.horizontal,
-
-                  itemCount:
-                  temples.length > 5 ? 5 : temples.length,
-                  itemBuilder:
-                      (context,
-                      index) {
-
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => DetailsScreen(
-                                  title: temples[index].name,
-                                  images: [temples[index].image],
-                                  description: temples[index].description, arabicName: temples[index].arabicName,
-                                  id: temples[index].id,
-                                ),
-                              ),
-                            );
-                          },
-
-                          child: CustomCard(
-                            imageUrl: temples[index].image,
-                            title: temples[index].name,
-                          ),
-                        );
-                  },
-                ),
-              ),
-
-              SizedBox(height: 25),
-              Row(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceBetween,
-
-                children: [
-                  SectionTitle(title: "Museums"),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              CategoryScreen(
-                                title: "Museums",
-                                items: museums,
-                                imageBuilder: (item) => item.image,
-                                detailsBuilder: (item) => DetailsScreen(
-                                  id: item.id,
-                                  title: item.name,
-                                  arabicName: item.arabicName,
-                                  description: item.description,
-                                  images: [item.image],
-                                ),
-                              ),
-                        ),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.arrow_forward_ios,
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 260,
-                child:
-                ListView.builder(
-                  scrollDirection:
-                  Axis.horizontal,
-
-                  itemCount:
-                  museums.length > 5 ? 5 : museums.length,
-                  itemBuilder:
-                      (context,
-                      index) {
-
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => DetailsScreen(
-                                  title: museums[index].name,
-                                  images: [museums[index].image],
-                                  description: museums[index].description, arabicName: museums[index].arabicName,
-                                  id: museums[index].id,
-                                ),
-                              ),
-                            );
-                          },
-
-                          child: CustomCard(
-                            imageUrl: museums[index].image,
-                            title: museums[index].name,
-                          ),
-                        );
-                  },
-                ),
-              ),
-
-              SizedBox(height: 25),
-              Row(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceBetween,
-
-                children: [
-                  SectionTitle(title: "Pharaohs"),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              CategoryScreen(
-                                title: "Pharaohs",
-                                items: pharaohs,
-                                imageBuilder: (item) => item.image,
-                                detailsBuilder: (item) => DetailsScreen(
-                                  id: item.id,
-                                  title: item.name,
-                                  arabicName: item.arabicName,
-                                  description: item.description,
-                                  images: [item.image],
-                                ),
-                              ),
-                        ),
-                      );
-                    },
-
-                    icon: Icon(Icons.arrow_forward_ios, color: Theme.of(context).textTheme.bodyLarge?.color,
-                  ),
-                  )],
-              ),
-
-              SizedBox(height: 260,
-                child:
-                ListView.builder(
-                  scrollDirection:
-                  Axis.horizontal,
-
-                  itemCount:
-                  pharaohs.length > 5 ? 5 : pharaohs.length,
-                  itemBuilder:
-                      (context,
-                      index) {
-
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => DetailsScreen(
-                                  title: pharaohs[index].name,
-                                  images: [pharaohs[index].image],
-                                  description: pharaohs[index].description, arabicName: pharaohs[index].arabicName,
-                                  id: pharaohs[index].id,
-                                ),
-                              ),
-                            );
-                          },
-
-                          child: CustomCard(
-                            imageUrl: pharaohs[index].image,
-                            title: pharaohs[index].name,
-                          ),
-                        );
-                  },
-                ),
-              ),
-
-              SizedBox(height: 25),
-              Row(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceBetween,
-
-                children: [
-                  SectionTitle(title: "Obelisks"),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              CategoryScreen(
-                                title: "Obelisks",
-                                items: obelisks,
-                                imageBuilder: (item) => item.images.first,
-                                detailsBuilder: (item) => DetailsScreen(
-                                  id: item.id,
-                                  title: item.name,
-                                  arabicName: item.arabicName,
-                                  description: item.description,
-                                  images: item.images,
-                                ),
-                              ),
-                        ),
-                      );
-                    },
-
-                    icon: Icon(Icons.arrow_forward_ios, color: Theme.of(context).textTheme.bodyLarge?.color,
-                  ),
-                  ) ],
-              ),
-
-              SizedBox(height: 260,
-                child:
-                ListView.builder(
-                  scrollDirection:
-                  Axis.horizontal,
-
-                  itemCount:
-                  obelisks.length > 5 ? 5 : obelisks.length,
-                  itemBuilder:
-                      (context,
-                      index) {
-
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => DetailsScreen(
-                                  title: obelisks[index].name,
-                                  // image: obelisks[index].images[0],
-                                  description: obelisks[index].description,
-                                  arabicName: obelisks[index].arabicName,
-                                  id: obelisks[index].id,
-                                  images: obelisks[index].images,
-                                ),
-                              ),
-                            );
-                          },
-
-                          child: CustomCard(
-                            imageUrl: obelisks[index].images[0],
-                            title: obelisks[index].name,
-                          ),
-                        );
-                  },
-                ),
-              ),
-              SizedBox(height: 30),
-              Row(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceBetween,
-
-                children: [
-                  SectionTitle(title: "Pyramids"),
-
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              CategoryScreen(
-                                title: "Pyramids",
-                                items: pyramids,
-                                imageBuilder: (item) => item.image,
-                                detailsBuilder: (item) => DetailsScreen(
-                                  id: item.id,
-                                  title: item.name,
-                                  arabicName: item.arabicName,
-                                  description: item.description,
-                                  images: [item.image],
-                                ),
-                              ),
-                        ),
-                      );
-                    },
-
-                    icon: Icon(Icons.arrow_forward_ios, color: Theme.of(context).textTheme.bodyLarge?.color,
-                  ),
-                  )],
-              ),
-              SizedBox(height: 260,
-                child:
-                ListView.builder(
-                  scrollDirection:
-                  Axis.horizontal,
-                  itemCount: pyramids.length > 5 ? 5 : pyramids.length,
-
-                  itemBuilder:
-                      (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => DetailsScreen(
-                              title: pyramids[index].name,
-                              images: [pyramids[index].image],
-                              description: pyramids[index].description,
-                              arabicName: pyramids[index].arabicName,
-                              id: pyramids[index].id,
-                            ),
-                          ),
-                        );
-                      },
-
-                      child: CustomCard(
-                        imageUrl: pyramids[index].image,
-                        title: pyramids[index].name,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () {
+                context.read<HomeCubit>().loadData();
+              },
+              icon: const Icon(Icons.refresh),
+              label: const Text("Try again"),
+            ),
+          ],
         ),
       ),
     );
   }
+
+  Widget buildHomeContent(HomeLoaded state) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Welcome to\nPharaonic civilization",
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+            ),
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            readOnly: true,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => SearchScreen()),
+              );
+            },
+            decoration: const InputDecoration(
+              hintText: "Search...",
+              prefixIcon: Icon(Icons.search),
+            ),
+          ),
+          const SizedBox(height: 20),
+          sectionTitle("Quotes"),
+          SizedBox(
+            height: 220,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: state.quotes.length,
+              itemBuilder: (context, index) {
+                return QuoteCard(
+                  imagePath: "assets/quotes_img/quote3.jpeg",
+                  quote: state.quotes[index].quote,
+                  author: state.quotes[index].author,
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 25),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SectionTitle(title: "Statues"),
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CategoryScreen(
+                        title: "Statues",
+                        items: state.statues,
+                        imageBuilder: (item) => item.images.first,
+                        detailsBuilder: (item) => DetailsScreen(
+                          id: item.id,
+                          title: item.name,
+                          arabicName: item.arabicName,
+                          description: item.description,
+                          images: item.images,
+                          heightM: item.heightM,
+                          material: item.material,
+                          period: item.period,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 260,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: state.statues.length > 5 ? 5 : state.statues.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => DetailsScreen(
+                          title: state.statues[index].name,
+                          images: state.statues[index].images,
+                          description: state.statues[index].description,
+                          arabicName: state.statues[index].arabicName,
+                          id: state.statues[index].id,
+                          material: state.statues[index].material,
+                          heightM: state.statues[index].heightM,
+                          period: state.statues[index].period,
+                        ),
+                      ),
+                    );
+                  },
+                  child: CustomCard(
+                    imageUrl: state.statues[index].images.first,
+                    title: state.statues[index].name,
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 25),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SectionTitle(title: "Temples"),
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CategoryScreen(
+                        title: "Temples",
+                        items: state.temples,
+                        imageBuilder: (item) => item.images.first,
+                        detailsBuilder: (item) => DetailsScreen(
+                          id: item.id,
+                          title: item.name,
+                          arabicName: item.arabicName,
+                          description: item.description,
+                          images: item.images,
+                          city: item.city,
+                          period: item.period,
+                          builtBy: item.builtBy,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 260,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: state.temples.length > 5 ? 5 : state.temples.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => DetailsScreen(
+                          title: state.temples[index].name,
+                          images: state.temples[index].images,
+                          description: state.temples[index].description,
+                          arabicName: state.temples[index].arabicName,
+                          id: state.temples[index].id,
+                          city: state.temples[index].city,
+                          period: state.temples[index].period,
+                          builtBy: state.temples[index].builtBy,
+                        ),
+                      ),
+                    );
+                  },
+                  child: CustomCard(
+                    imageUrl: state.temples[index].images.first,
+                    title: state.temples[index].name,
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 25),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SectionTitle(title: "Museums"),
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CategoryScreen(
+                        title: "Museums",
+                        items: state.museums,
+                        imageBuilder: (item) => item.images.first,
+                        detailsBuilder: (item) => DetailsScreen(
+                          id: item.id,
+                          title: item.name,
+                          arabicName: item.arabicName,
+                          description: item.description,
+                          images: item.images,
+                          established: item.established,
+                          city: item.city,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 260,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: state.museums.length > 5 ? 5 : state.museums.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => DetailsScreen(
+                          title: state.museums[index].name,
+                          images: state.museums[index].images,
+                          description: state.museums[index].description,
+                          arabicName: state.museums[index].arabicName,
+                          id: state.museums[index].id,
+                          established: state.museums[index].established,
+                          city: state.museums[index].city,
+                        ),
+                      ),
+                    );
+                  },
+                  child: CustomCard(
+                    imageUrl: state.museums[index].images.first,
+                    title: state.museums[index].name,
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 25),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SectionTitle(title: "Pharaohs"),
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CategoryScreen(
+                        title: "Pharaohs",
+                        items: state.pharaohs,
+                        imageBuilder: (item) => item.images.first,
+                        detailsBuilder: (item) => DetailsScreen(
+                          id: item.id,
+                          title: item.name,
+                          arabicName: item.arabicName,
+                          description: item.description,
+                          images: item.images,
+                          capital: item.capital,
+                          achievements: item.achievements,
+                          dynasty: item.dynasty,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 260,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: state.pharaohs.length > 5 ? 5 : state.pharaohs.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => DetailsScreen(
+                          title: state.pharaohs[index].name,
+                          images: state.pharaohs[index].images,
+                          description: state.pharaohs[index].description,
+                          arabicName: state.pharaohs[index].arabicName,
+                          id: state.pharaohs[index].id,
+                          capital: state.pharaohs[index].capital,
+                          achievements: state.pharaohs[index].achievements,
+                          dynasty: state.pharaohs[index].dynasty,
+                        ),
+                      ),
+                    );
+                  },
+                  child: CustomCard(
+                    imageUrl: state.pharaohs[index].images.first,
+                    title: state.pharaohs[index].name,
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 25),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SectionTitle(title: "Obelisks"),
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CategoryScreen(
+                        title: "Obelisks",
+                        items: state.obelisks,
+                        imageBuilder: (item) => item.images.first,
+                        detailsBuilder: (item) => DetailsScreen(
+                          id: item.id,
+                          title: item.name,
+                          arabicName: item.arabicName,
+                          description: item.description,
+                          images: item.images,
+                          city: item.city,
+                          historicalEra: item.historicalEra,
+                          location: item.location,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 260,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: state.obelisks.length > 5 ? 5 : state.obelisks.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => DetailsScreen(
+                          title: state.obelisks[index].name,
+                          description: state.obelisks[index].description,
+                          arabicName: state.obelisks[index].arabicName,
+                          id: state.obelisks[index].id,
+                          images: state.obelisks[index].images,
+                          city: state.obelisks[index].city,
+                          location: state.obelisks[index].location,
+                          historicalEra: state.obelisks[index].historicalEra,
+                        ),
+                      ),
+                    );
+                  },
+                  child: CustomCard(
+                    imageUrl: state.obelisks[index].images.first,
+                    title: state.obelisks[index].name,
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 30),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SectionTitle(title: "Pyramids"),
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CategoryScreen(
+                        title: "Pyramids",
+                        items: state.pyramids,
+                        imageBuilder: (item) => item.images.first,
+                        detailsBuilder: (item) => DetailsScreen(
+                          id: item.id,
+                          title: item.name,
+                          arabicName: item.arabicName,
+                          description: item.description,
+                          images: item.images,
+                          city: item.city,
+                          period: item.period,
+                          builtBy: item.builtBy,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 260,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: state.pyramids.length > 5 ? 5 : state.pyramids.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => DetailsScreen(
+                          title: state.pyramids[index].name,
+                          images: state.pyramids[index].images,
+                          description: state.pyramids[index].description,
+                          arabicName: state.pyramids[index].arabicName,
+                          id: state.pyramids[index].id,
+                          city: state.pyramids[index].city,
+                          period: state.pyramids[index].period,
+                          builtBy: state.pyramids[index].builtBy,
+                        ),
+                      ),
+                    );
+                  },
+                  child: CustomCard(
+                    imageUrl: state.pyramids[index].images.first,
+                    title: state.pyramids[index].name,
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SafeArea(
+        child: BlocBuilder<HomeCubit, HomeState>(
+          builder: (context, state) {
+            if (state is HomeLoaded) {
+              return buildHomeContent(state);
+            }
+
+            if (state is HomeError) {
+              return buildErrorState(state);
+            }
+
+            return const Center(child: CircularProgressIndicator());
+          },
+        ),
+      ),
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }

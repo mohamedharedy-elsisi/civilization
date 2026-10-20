@@ -1,7 +1,7 @@
 class ApiConstants {
 
   static const String baseUrl =
-      "https://civilization-api-production.up.railway.app";
+      "https://civilization-api.vercel.app";
 
 
 

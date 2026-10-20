@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../views/DetailsScreen.dart';
 
 class AIService {
-  static const String baseUrl = "https://civilization-api.vercel.app";
+  static const String baseUrl = "https://civilization-api-edited.vercel.app";
 
   static final ImagePicker _picker = ImagePicker();
 

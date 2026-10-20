@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
 
-  static const String baseUrl = "https://civilization-api.vercel.app";
+  static const String baseUrl = "https://civilization-api-edited.vercel.app";
 
   Future<List<dynamic>> getData(
       String endpoint) async {
